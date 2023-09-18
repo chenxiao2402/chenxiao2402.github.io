@@ -32,20 +32,20 @@ google_verify: "SkiyuGpJOKT74vv5GmXLvYXXDkXy4v8VWPtbelYz3Hs"
 # Links to include in top navigation
 # For external links add external: true
 links:
-  - title: About Me
+  - title: Home
     url: /
-  - title: Resume
-    url: /file/CV-HanlinCAI.pdf
-  - title: Publications
-    url: /publications/
-  - title: Awards
-    url: /awards/
-  - title: Fundings
-    url: /fundings/
   - title: Hobbies
     url: /hobbies/
-  - title: Blogs
-    url: /blogs/
+  - title: Resume
+    url: /file/CV-HanlinCAI.pdf
+  # - title: Publications
+  #   url: /publications/
+  # - title: Awards
+  #   url: /awards/
+  # - title: Fundings
+  #   url: /fundings/
+  # - title: Blogs
+  #   url: /blogs/
 
 # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 timezone: China/Beijing
