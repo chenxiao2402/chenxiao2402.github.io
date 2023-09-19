@@ -1,7 +1,7 @@
 <div class="navigation-wrapper">
 	<div class="site-name">
 		<div style="text-align: center;">
-			<a href="{{ site.url }}" style="font-size:32px;">
+			<a href="{{ site.url }}" style="font-size:24px;">
 				{{ site.title }}
 			</a>
 		</div>
@@ -11,7 +11,7 @@
 		<nav role="navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
 		    <ul>
 		        {% for link in site.links %}
-            <li><a href="{{ site.url }}{{ link.url }}" {% if url == link.url %}class="top-navigation-current"{% endif %} style="font-size:32px;">{{ link.title }}</a></li>
+            <li><a href="{{ site.url }}{{ link.url }}" {% if url == link.url %}class="top-navigation-current"{% endif %} style="font-size:24px;">{{ link.title }}</a></li>
 		        {% endfor %}
 		    </ul>
 		</nav>
