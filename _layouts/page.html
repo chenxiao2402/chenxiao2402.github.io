@@ -35,7 +35,7 @@
   <img src="{{ site.url }}/images/{{ page.image.feature }}" alt="{{ page.title }} feature image" itemprop="primaryImageOfPage">
 </div><!-- /.image-wrap -->{% endif %}
 
-<div id="main" role="main"  itemprop="mainContentOfPage">
+<div id="main" role="main"  itemprop="mainContentOfPage" style="min-height: calc(100vh - 108px - 100px - 16px);">
   <div class="article-author-top">
     {% include author-bio.html %}
     <div>
@@ -59,6 +59,7 @@
     {% include footer.html %}
   </footer>
 </div><!-- /.footer-wrap -->
+
 
 {% include scripts.html %}
 
