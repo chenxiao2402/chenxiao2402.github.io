@@ -254,7 +254,7 @@ html{font-size:100%;}
 .image-grid li{width:20%;}
 html{font-size:112.5%;}
 .image-grid li{width:16.666666666%;}
-.site-name{display:inline;float:left;width:12.5%;margin-left:16.666666666666668%;}
+.site-name{display:inline;float:left;width:16.666666666666668%;margin-left:12.5%;}
 .top-navigation{display:inline;float:left;width:66.66666666666667%;}
 .image-wrap:after{left:33.333333333%;}
 .image-wrap .headline-wrap{margin-left:8.333333333333334%;}
@@ -262,4 +262,4 @@ html{font-size:112.5%;}
 #index{display:inline;float:left;width:37.5%;}
 .related-articles{display:inline;float:left;width:37.5%;margin-left:33.333333333333336%;margin-right:29.166666666666668%;}
 .footer-wrap footer{display:inline;float:left;width:37.5%;margin-left:33.333333333333336%;margin-right:29.166666666666668%;}
-.article-author-top{display:inline;float:left;width:12.5%;margin-left:16.666666666666668%;}
+.article-author-top{display:inline;float:left;width:16.666666666666668%;margin-left:12.5%;}

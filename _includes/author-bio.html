@@ -3,7 +3,7 @@
 <!-- <h4>{{ site.owner.name }}</h4> -->
 
 <p>{{ site.owner.bio }}</p>
-{% if site.owner.email %}<p style="text-indent:0;margin-top:1.5em;"><a href="mailto:{{ site.owner.email }}" target="_blank"><i class="icon-mail"></i> Email</a></p>{% endif %}
+{% if site.owner.email %}<p style="text-indent:0;margin-top:1.5em;"><a href="mailto:{{ site.owner.email }}" target="_blank"><i class="icon-mail"></i> {{ site.owner.email }}</a></p>{% endif %}
 
 {% if site.owner.twitter %}<p style="text-indent:0;"><a href="https://twitter.com/{{ site.owner.twitter }}"><i class="icon-twitter"></i> Twitter</a></p>{% endif %}
 
@@ -11,11 +11,11 @@
 
 {% if site.owner.google_plus %}<p style="text-indent:0;"><a href="{{ site.owner.google_plus }}"><i class="icon-google-plus"></i> Google+</a></p>{% endif %}
 
-{% if site.owner.linkedin %}<p style="text-indent:0;"><a href="https://linkedin.com/in/{{ site.owner.linkedin }}"><i class="icon-linkedin"></i> LinkedIn</a></p>{% endif %}
+{% if site.owner.linkedin %}<p style="text-indent:0;"><a href="https://linkedin.com/in/{{ site.owner.linkedin }}"><i class="icon-linkedin"></i> linkedin.com/in/{{ site.owner.linkedin }} </a></p>{% endif %}
 
 {% if site.owner.instagram %}<p style="text-indent:0;"><a href="https://instagram.com/{{ site.owner.instagram }}"><i class="icon-instagram"></i> Instagram</a></p>{% endif %}
 
-{% if site.owner.github %}<p style="text-indent:0;"><a href="https://github.com/{{ site.owner.github }}"><i class="icon-github"></i> Github</a></p>{% endif %}
+{% if site.owner.github %}<p style="text-indent:0;"><a href="https://github.com/{{ site.owner.github }}"><i class="icon-github"></i> github.com/{{ site.owner.github }}</a></p>{% endif %}
 
 {% if site.owner.lastfm %}<p style="text-indent:0;"><a href="https://lastfm.com/{{ site.owner.lastfm }}"><i class="icon-lastfm"></i> Last.fm</a></p>{% endif %}
 
