@@ -242,7 +242,7 @@ html{background-color:#ffffff;font-family:'PT Serif',serif;font-color:#333332;fo
 .top-navigation li{list-style-type:none;display:inline;margin-right:25px;}
 .top-navigation li a{color:#a0a0a0;decoration:none;border-bottom:0 solid transparent;-webkit-transition:all 0.2s;-moz-transition:all 0.2s;-ms-transition:all 0.2s;-o-transition:all 0.2s;transition:all 0.2s;}
 .top-navigation-current{color:#0b0b0b!important;text-decoration: underline;}
-#main{counter-reset:captions;margin:0 auto auto auto;width:100%;*zoom:1;clear:both;margin-top:1em;}#main:before,#main:after{display:table;content:"";}
+#main{counter-reset:captions;margin:16px 0 0 0;width:100%;*zoom:1;clear:both;}#main:before,#main:after{display:table;content:"";}
 #main:after{clear:both;}
 #main:before,#main:after{content:"";display:table;}
 #main:after{clear:both;}
