@@ -3,6 +3,54 @@
 <!-- <h4>{{ site.owner.name }}</h4> -->
 
 <p>{{ site.owner.bio }}</p>
+
+<p style="text-indent:0;margin-top:1.5em;font-weight:bold;">
+  Xiao Chen (陈骁)
+</p>
+<p style="text-indent:0;">
+  A second-year Master Student in Computer Science
+</p>
+
+<p style="text-indent:0;margin-top:1.5em;">
+  <div style="height:32px;display:flex">
+    <div style="width:32px;height:32px">
+    <a href="https://www.mccormick.northwestern.edu/computer-science/" >
+      <span class="material-icons">school</span>
+    </a>
+    </div>
+    <div style="height:32px;font-size:80%;">
+      <span>Northwestern University</span>
+    </div>
+  </div>
+</p>
+
+<p style="text-indent:0;">
+  <div style="height:32px;display:flex">
+    <div style="width:32px;height:32px">
+    <a href="mailto:{{ site.owner.email }}">
+      <span class="material-icons">mail</span>
+    </a>
+    </div>
+    <div style="height:32px;font-size:80%;">
+      <span>{{ site.owner.email }}</span>
+    </div>
+  </div>
+</p>
+
+<p style="text-indent:0;">
+  <div style="height:32px;display:flex">
+    <div style="width:32px;height:32px">
+      <a href="https://github.com/{{ site.owner.github }}">
+        <i class="icon-github" style="height:24px;width:24px;"></i>
+      </a>
+    </div>
+    <div style="height:32px;font-size:80%;">
+      <span>github.com/{{ site.owner.github }}</span>
+    </div>
+  </div>
+</p>
+
+
 {% if site.owner.email %}<p style="text-indent:0;margin-top:1.5em;"><a href="mailto:{{ site.owner.email }}" target="_blank"><i class="icon-mail"></i> {{ site.owner.email }}</a></p>{% endif %}
 
 {% if site.owner.twitter %}<p style="text-indent:0;"><a href="https://twitter.com/{{ site.owner.twitter }}"><i class="icon-twitter"></i> Twitter</a></p>{% endif %}
