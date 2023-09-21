@@ -48,7 +48,7 @@ table{border-collapse:collapse;border-spacing:0;margin-bottom:1.5em;}
 .normal-wrap{word-wrap:normal;}
 .inherit-wrap{word-wrap:auto;}
 .drop-cap:first-letter{float:left;margin:inherit;padding:inherit;font-size:4em;font-family:inherit;line-height:1;text-indent:0;background:transparent;color:inherit;}
-html{font:normal 112.5%/1.65 serif;}
+html{font:normal 100%/1.65 serif;}
 body{word-wrap:normal;color:#333332;}
 .tera{font-size:117px;font-size:6.5rem;margin-bottom:0.25384615384615383rem;}
 .giga{font-size:90px;font-size:5rem;margin-bottom:0.33rem;}
@@ -252,7 +252,7 @@ html{font-size:95%;}
 .related-articles{display:inline;float:left;width:50%;margin-left:25%;margin-right:25%;}
 html{font-size:100%;}
 .image-grid li{width:20%;}
-html{font-size:112.5%;}
+html{font-size:100%;}
 .image-grid li{width:14.166666666%;}
 .site-name{display:inline;float:left;min-width:240px;width:14.166666666666668%;margin-left:15%;}
 .top-navigation{display:inline;float:left;width:auto;}

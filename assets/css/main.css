@@ -48,7 +48,7 @@ table{border-collapse:collapse;border-spacing:0;margin-bottom:1.5em;}
 .normal-wrap{word-wrap:normal;}
 .inherit-wrap{word-wrap:auto;}
 .drop-cap:first-letter{float:left;margin:inherit;padding:inherit;font-size:4em;font-family:inherit;line-height:1;text-indent:0;background:transparent;color:inherit;}
-html{font:normal 112.5%/1.65 serif;}
+html{font:normal 100%/1.65 serif;}
 body{word-wrap:normal;color:#333332;}
 .tera{font-size:117px;font-size:6.5rem;margin-bottom:0.25384615384615383rem;}
 .giga{font-size:90px;font-size:5rem;margin-bottom:0.33rem;}
@@ -380,7 +380,7 @@ img.mfp-img{width:auto;max-width:100%;height:auto;display:block;line-height:0;-w
 @media only screen and (min-width:30em){.image-grid li{width:33.333333%;}}
 @media only screen and (min-width:37.5em){html{font-size:95%;} .site-name{display:inline;float:left;min-width:240px;width:14.166666666666668%;margin-left:4.166666666666667%;margin-right:4.166666666666667%;} .top-navigation{display:inline;float:left;width:auto;margin-left:0%;margin-right:0%;} .image-wrap .headline-wrap,.image-wrap:after{left:25%;} .image-wrap .headline-wrap{margin-left:0;} #main article{display:inline;float:left;width:calc(100% - 8.333333333% - 240px - 1em);max-width:66.666667%;margin-left:0%;margin-right:0%;} #index{display:inline;float:left;width:calc(100% - 8.333333333% - 240px - 1em);max-width:66.666667%;margin-left:0%;margin-right:0%;} .footer-wrap footer{display:inline;float:left;width:50%;margin-left:25%;margin-right:25%;} .article-author-top{display:block;display:inline;float:left;min-width:240px;width:14.166666666666668%;margin-left:4.166666666666667%;margin-right:4.166666666666667%;} .article-author-bottom{display:none;} .toc{display:block;display:inline;float:left;width:14.166666666666668%;margin-left:4.166666666666667%;margin-right:4.166666666666667%;position:fixed;top:120px;right:0;-webkit-box-shadow:0 0 5px rgba(0, 0, 0, 0.5);-moz-box-shadow:0 0 5px rgba(0, 0, 0, 0.5);box-shadow:0 0 5px rgba(0, 0, 0, 0.5);} .image-grid li{width:25%;} .related-articles{display:inline;float:left;width:50%;margin-left:25%;margin-right:25%;}}@media only screen and (min-width:48em){html{font-size:100%;} .image-grid li{width:20%;}}
 @media only screen and (min-width:60em){#main article{width:66.666667%;} #index{width:66.666667%}}
-@media only screen and (min-width:62em){html{font-size:112.5%;} .image-grid li{width:14.166666666%;}}
+@media only screen and (min-width:62em){html{font-size:100%;} .image-grid li{width:14.166666666%;}}
 @media only screen and (min-width:86.375em){.site-name{display:inline;float:left;min-width:240px;width:14.166666666666668%;margin-left:15%;} .top-navigation{display:inline;float:left;width:auto;} .image-wrap:after{left:33.333333333%;} .image-wrap .headline-wrap{margin-left:8.333333333333334%;} 
 #main article{display:inline;float:left;width:50%;} 
 #index{display:inline;float:left;width:50%;} 
