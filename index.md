@@ -2,13 +2,16 @@
 layout: page
 ---
 
-# About Me
 
-<img src="https://caihanlin.com/caihanlin.jpg" class="floatpic" width="360" height="480">
+<img src="./images/xiaochen.jpg" class="floatpic" width="360" height="480">
 
-Here is **Hanlin Cai (Lance, 蔡汉霖)**.
+## About Me
 
-I am a senior student majoring in **Automation** at Fuzhou University and **Robotics** at Maynooth University (Ireland, Combined Degrees). Currently, I am working as a research assistant in the **IACTIP Lab** (Provincial Key), advised by [Prof. Zhezhuang Xu](https://www.researchgate.net/profile/Zhezhuang-Xu). Here is [[my CV](https://caihanlin.com/file/CV-HanlinCAI.pdf)].
+This is **Xiao Chen (陈骁)**. Thank you very much for visiting my website.
+
+I am a second-year master student in **Computer Science** at Northwestern University. Currently, I am focusing on enforcing the integrity of types in the gradual typing context, advised by [Prof. Christos Dimoulas](https://users.cs.northwestern.edu/~chrdimo/). 
+
+Previously, I worked with [Prof. Simone Campanoni](https://users.cs.northwestern.edu/~simonec/) on program analysis and parallelizing compilers, which is part of the [NOELLE](https://github.com/arcana-lab/noelle) project.
 
 <br>
 
