@@ -22,7 +22,7 @@ sub{bottom:-0.25em;}
 img{border:0;}
 svg:not(:root){overflow:hidden;}
 figure{margin:0;}
-fieldset{border:1px solid #c0c0c0;margin:0 2px;padding:0.35em 0.625em 0.75em;}
+fieldset{border:1px solid #c0c0c0;margin:0 2px;padding:0.35em 0.625em 0.80em;}
 legend{border:0;padding:0;}
 button,input,select,textarea{font-family:inherit;font-size:100%;margin:0;}
 button,input{line-height:normal;}
@@ -80,7 +80,7 @@ h1,h2,h3,h4,h5,h6{color:#333332;}
 .dictionary-style dd{display:block;counter-increment:definitions;}.dictionary-style dd:before{content:counter(definitions, decimal) ". ";}
 .stats-tabs{padding:0;}.stats-tabs li{display:inline-block;margin:0 0.625rem 0 0;padding:0 0.625rem 0 0;border-right:0.125rem solid #cccccc;}.stats-tabs li:last-child{margin:0;padding:0;border:none;}
 .stats-tabs li a{display:inline-block;font-size:1.5rem;font-weight:bold;}.stats-tabs li a b{display:block;margin:0.125rem 0 0 0;font-size:0.875rem;font-weight:normal;}
-.cite{display:block;font-size:0.875em;text-align:right;}
+.cite{display:block;font-size:0.880em;text-align:right;}
 .pull-quote{position:relative;padding:1em;}.pull-quote:before,.pull-quote:after{height:1em;opacity:0.15;position:absolute;font-size:4em;}
 .pull-quote:before{content:'“';top:0em;left:0em;}
 .pull-quote:after{content:'”';bottom:0em;right:0em;}
@@ -95,7 +95,7 @@ ul li{list-style-type:square;}
 ol li{list-style-type:upper-roman;}
 p>a,li>a,em>a,a>em,footer a{text-decoration:none;border-bottom:1px dotted #b3b3b1;}
 p>a:hover,li>a:hover,em>a:hover,footer a:hover{text-decoration:none;border-bottom:1px solid #b3b3b1;}
-figcaption{margin-top:0.75em;line-height:1.25;font-size:18px;font-size:1rem;margin-bottom:1.65rem;font-family:'PT Sans Narrow',sans-serif;counter-increment:captions;}figcaption:before{font-weight:700;text-transform:uppercase;content:"Figure " counter(captions) ": ";}
+figcaption{margin-top:0.80em;line-height:1.25;font-size:18px;font-size:1rem;margin-bottom:1.65rem;font-family:'PT Sans Narrow',sans-serif;counter-increment:captions;}figcaption:before{font-weight:700;text-transform:uppercase;content:"Figure " counter(captions) ": ";}
 .notice{margin-top:1.5em;padding:.5em 1em;text-indent:0;font-size:90%;background-color:#ddd;border-left:10px solid #ccc;}
 blockquote{font-style:italic;margin-left:0;padding-left:1em;border-left:10px solid #ccc;}blockquote p+p{text-indent:0;margin-top:0;}
 .footnotes{font-size:90%;}
