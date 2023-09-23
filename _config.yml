@@ -24,7 +24,7 @@ owner:
 
 # Analytics and webmaster tools stuff goes here
 # https://search.google.com/search-console/ownership
-google_verify: "SkiyuGpJOKT74vv5GmXLvYXXDkXy4v8VWPtbelYz3Hs"
+# google_verify: "SkiyuGpJOKT74vv5GmXLvYXXDkXy4v8VWPtbelYz3Hs"
 
 # https://ssl.bing.com/webmaster/configure/verify/ownership Option 2 content= goes here
 # bing_verify: ""
@@ -34,8 +34,8 @@ google_verify: "SkiyuGpJOKT74vv5GmXLvYXXDkXy4v8VWPtbelYz3Hs"
 links:
   - title: Home
     url: /
-  - title: Hobbies
-    url: /hobbies/
+  # - title: Hobbies
+  #   url: /hobbies/
   - title: Resume
     url: /file/CV-HanlinCAI.pdf
   # - title: Publications
@@ -48,7 +48,7 @@ links:
   #   url: /blogs/
 
 # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-timezone: China/Beijing
+timezone: American/Chicago
 future: true
 highlighter: rouge
 # markdown: kramdown
