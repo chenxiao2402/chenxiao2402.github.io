@@ -258,7 +258,7 @@ html{font-size:100%;}
 .image-grid li{width:20%;}
 html{font-size:100%;}
 .image-grid li{width:14.166666666%;}
-.site-name{display:inline;float:left;min-width:200px;width:14.166666666666668%;margin-left:15%;}
+.site-name{display:inline;float:left;min-width:200px;width:14.166666666666668%;margin-left:10%;}
 .top-navigation{display:inline;float:left;width:auto;}
 .image-wrap:after{left:33.333333333%;}
 .image-wrap .headline-wrap{margin-left:8.333333333333334%;}
@@ -266,4 +266,4 @@ html{font-size:100%;}
 #index{display:inline;float:left;width:50%;}
 .related-articles{display:inline;float:left;width:50%;margin-left:33.333333333%;margin-right:16.666666667%;}
 .footer-wrap footer{display:inline;float:left;width:37.5%;margin-left:33.333333333333336%;margin-right:29.166666666666668%}
-.article-author-top{display:inline;float:left;min-width:200px;width:14.166666666666668%;margin-left:15%;}
+.article-author-top{display:inline;float:left;min-width:200px;width:14.166666666666668%;margin-left:10%;}
