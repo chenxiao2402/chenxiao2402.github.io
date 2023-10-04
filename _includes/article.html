@@ -9,7 +9,7 @@
 </p>
 
 <p class="cx-parapraph">
-  I am a second-year master student in <strong>Computer Science</strong> at Northwestern University. Currently, I am focusing on enforcing the integrity of types in the gradual typing context, advised by <a href="https://users.cs.northwestern.edu/~chrdimo/">Prof. Christos Dimoulas</a>. 
+  I am a second-year master student in <strong>Computer Science</strong> at Northwestern University. Currently, I'm focusing on enforcing the type integrity in gradual typing systems, advised by <a href="https://users.cs.northwestern.edu/~chrdimo/">Prof. Christos Dimoulas</a>. 
 </p>
 
 <p class="cx-parapraph">
@@ -86,4 +86,28 @@
 
 <h2 style="margin: 32px auto 16px auto;">Research Interests</h2> 
 
-<h2 style="margin: 32px auto 16px auto;">Work Experience</h2> 
+<p class="cx-parapraph">
+My research interests primarily lie in the area of <strong>Programming Languages</strong>, spanning from the theoretical fundation to the implementation of compilers. Broadly speaking, I enjoy designing and implementing new language features that could facilitate the development of programmers.
+</p>
+
+<ul>
+  <li>
+    <p class="cx-parapraph">
+      Currently my research revolves around <a href="https://www2.ccs.neu.edu/racket/pubs/oopsla19-gfd.pdf">Complete Monitoring</a>, a property that tracks the flow of values in gradual typing systems using ownership annotations and propogation rules for ownership. I've derived some new syntactic techniques that help eliminate the necessity for ownership annotations by introducing collecting semantics derived almost mechanically from the origin semantics of the language, along with rigorous proofs to show the correctness of these new syntactic techniques. The main focus in the future is to enhance the collecting semantics based on some uniform rules about how locations are associated with types that they must satisfy, so that we could not only track but also enforce the type integrity of the program.
+    </p>
+  </li>
+  <li>
+    <p class="cx-parapraph">
+      Previously I worked on parallelizing compilers in the <a href="https://github.com/arcana-lab/noelle">NOELLE</a> project, with the goal to map programs to a multicore platform gaining nontrivial speedup. Specifically, I focus on transforming dynamic memory allocations and global variables into local variables to enable optimizations only applicable to local variables. In addition, my other work helped remove overly-conservative loop-carried memory dependences in the program dependence graph, in order to get rid of unnecessary locks and achieve higher speedup for parallelization.
+    </p>
+  </li>
+</ul>
+
+
+
+
+<!-- <h2 style="margin: 32px auto 16px auto;">Work Experience</h2> 
+
+I am interested in the theory of programming languages.  My interests also include implementing programming languages, building abstract machines, and playing with compilers for functional languages.
+
+I currently work on behavioral boundaries, a theoretical foundation for specifying and comparing contract systems. Behavioral boundaries are a syntactic device that re-structure the common formal model of higher-order contract systems into an interposition subsystem and a monitoring subsystem. The interposition subsystem track the flow of values in programs to emit events during evaluation, whereas the monitoring subsystem enforces the contracts. By providing a uniform interface between the two subsystems, behavioral boundaries enable language designers to specify contract systems modularly. The uniform interface additionally admits a generic safey theorem, reducing the boilerplate needed when proving the correctness of contract systems. -->
