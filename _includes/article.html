@@ -93,7 +93,21 @@ My research interests primarily lie in the area of <strong>Programming Languages
 <ul>
   <li>
     <p class="cx-parapraph">
-      Currently, my research revolves around <a href="https://www2.ccs.neu.edu/racket/pubs/oopsla19-gfd.pdf">Complete Monitoring</a>, a property that formalizes the flow of values in gradual typing systems using ownership annotations and propagation rules for ownership to help assess the quality of blame assignments for responsible components when a runtime type mismatch occurs. I've derived new syntactic techniques that help eliminate the necessity for ownership annotations by introducing collecting semantics, along with the rigorous proof to show the program behavior is preserved. The main focus in the future is to enhance the collecting semantics based on uniform rules about how locations are associated with types they must satisfy, so that we could not only track but also enforce the type integrity of the program.
+      Currently, my research revolves around <a href="https://www2.ccs.neu.edu/racket/pubs/esop12-dthf.pdf">Complete Monitoring</a>, 
+      a property that formalizes the flow of values in gradual typing systems using ownership annotations and propagation rules for ownership to help assess the quality 
+      of blame assignments for responsible components when a runtime type mismatch occurs. 
+      I've derived new syntactic techniques that help eliminate the necessity for ownership annotations by introducing collecting semantics, along with the 
+      rigorous proof to show the program behavior is preserved. 
+      The main focus in the future is to enhance the collecting semantics based on uniform rules about how locations are associated with types they must satisfy, 
+      so that we could not only track but also enforce the type integrity of the program. 
+    </p>
+  </li>
+  <li>
+    <p class="cx-parapraph">
+      One ongoing progress is a high-order dynamic semantics that could eagerly check inconsistency in the type history of each value. 
+      Moreover, tracking the type history allows this semantics to achieve blame completeness and blame soundness.
+      Different from the <a href="https://www2.ccs.neu.edu/racket/pubs/oopsla19-gfd.pdf">Amnesic</a> semantics, the type history is encoded in the memory instead of being explicitly recorded in the expression.
+      This strategy makes this new semantics more efficient because the type history will be incrementally updated during evaluation, while being decoded and checked only when type mismatch actually happens.
     </p>
   </li>
   <li>
