@@ -1,0 +1,80 @@
+# 中文内容。运行 ./edit.sh，在编辑器中选择“中文”即可修改。
+# 按现有英文内容翻译，保留原有日期及尚未更新的个人信息。
+site:
+  title: 陈骁 · 程序设计语言
+  description: 陈骁（Xiao Chen），研究方向包括程序设计语言、渐进类型系统、程序分析与并行化编译器。
+  url: https://chenxiao2402.github.io
+  language: zh-CN
+profile:
+  name: 陈骁
+  nativeName: Xiao Chen
+  role: 计算机科学硕士二年级学生
+  affiliation: 美国西北大学
+  location: 美国伊利诺伊州埃文斯顿
+  email: xiaochen2023@u.northwestern.edu
+  github: https://github.com/chenxiao2402
+  linkedin: https://linkedin.com/in/chenxiao2402
+  photo: /images/xiaochen.jpg
+  cv: /file/XiaoChen_CV.pdf
+  interests:
+    - 程序设计语言
+    - 渐进类型
+    - 并行化编译器
+home:
+  researchHeading: 研究方向
+  educationHeading: 教育经历
+  newsHeading: 近况与动态
+  contactHeading: 联系方式
+  contactText: 感谢访问我的个人网站。
+  educationNote: 我正在申请 2024 年秋季入学的*程序设计语言*方向博士项目。
+  contentUpdated: "2023-11-04"
+research:
+  - id: complete-monitoring
+    title: 完全监控
+    category: 渐进类型 · 类型完整性
+    body: |
+      目前，我的研究围绕[完全监控（Complete Monitoring）](https://www2.ccs.neu.edu/racket/pubs/esop12-dthf.pdf)展开。这一性质使用所有权标注及其传播规则，对渐进类型系统中值的流动进行形式化描述，从而帮助评估：在运行时发生类型不匹配时，责任归因是否准确地指向了应负责的程序组件。
+
+      我提出了新的句法技术，通过引入收集语义（collecting semantics）来消除对所有权标注的依赖，并严格证明了这一方法保持程序行为不变。未来的重点是进一步完善收集语义，用统一的规则描述内存位置与其必须满足的类型之间的关联，从而不仅能够跟踪，还能够强制保证程序的类型完整性。
+  - id: dynamic-semantics
+    title: 动态语义
+    category: 类型历史 · 运行时检查
+    body: |
+      在此基础上，我正在研究一种高阶动态语义，以便及早检查每个值的类型历史中是否存在不一致。与 [Amnesic 语义](https://www2.ccs.neu.edu/racket/pubs/oopsla19-gfd.pdf)不同，这一方法将类型历史编码在内存中，而不是显式记录在表达式里。
+
+      这种策略使新的语义更加高效：类型历史在求值过程中增量更新，只有当类型不匹配实际发生时，才进行解码和检查。
+  - id: parallelizing-compilers
+    title: 并行化编译器
+    category: 程序分析 · NOELLE
+    body: |
+      此前，我在 [NOELLE](https://github.com/arcana-lab/noelle) 项目中从事并行化编译器研究，目标是将程序映射到多核平台上，以获得可观的加速。具体而言，我实现了一种新的过程内可能指向分析（intraprocedural may points-to analysis），并将其集成到私有化转换器中。该转换器在保持程序语义的前提下，将动态内存分配和全局变量转换为局部变量，从而支持原本仅适用于 AllocaInst 的程序变换。
+
+      此外，这项可能指向分析还帮助消除了程序依赖图中过于保守的循环携带内存依赖，减少了不必要的同步，从而获得更高的并行加速比。
+education:
+  - institution: 印第安纳大学布卢明顿分校
+    degree: 计算机科学博士
+    location: 美国印第安纳州布卢明顿
+    dates: 2024 年 9 月 - ?
+    logo: /images/iub.png
+  - institution: 美国西北大学
+    degree: 计算机科学理学硕士
+    location: 美国伊利诺伊州埃文斯顿
+    dates: 2022 年 9 月 - 2024 年 6 月
+    logo: /images/nwu.png
+  - institution: 南京大学
+    degree: 电子信息工程硕士
+    location: 中国江苏南京
+    dates: 2020 年 9 月 - 2022 年 6 月
+    logo: /images/nju.png
+  - institution: 南京大学
+    degree: 软件工程工学学士
+    location: 中国江苏南京
+    dates: 2016 年 9 月 - 2020 年 6 月
+    logo: /images/nju.png
+news:
+  - date: "2023-10-06"
+    body: 很幸运，在 [Midwest PL Summit 2023](https://mwpls2023.engin.umich.edu/) 上与 [Max](https://maxsnew.com/)、[Eric](https://www-personal.umich.edu/~ericgio/index.html)、[Edward](https://plg.uwaterloo.ca/~e45lee/)、[Guannan](https://continuation.passing.style/) 和 [Pedro](https://pedroabreu0.github.io/) 进行了许多富有启发的交流。
+  - date: "2023-10-05"
+    body: 明天将参加 [Midwest PL Summit 2023](https://mwpls2023.engin.umich.edu/)。安娜堡是一座非常美丽的城市。
+  - date: "2023-09-22"
+    body: 我的工作已全部合并到 [NOELLE](https://github.com/arcana-lab/noelle) 项目中。

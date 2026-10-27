@@ -1,0 +1,76 @@
+# Edit this file as plain text, or run ./edit.sh for the browser editor.
+# Biographical information is intentionally preserved from the published site.
+site:
+  title: Xiao Chen · Programming Languages
+  description: Xiao Chen (陈骁). Research in programming languages, gradual typing systems, program analysis, and parallelizing compilers.
+  url: https://chenxiao2402.github.io
+  language: en
+profile:
+  name: Xiao Chen
+  nativeName: 陈骁
+  role: A second-year Master Student in Computer Science
+  affiliation: Northwestern University
+  location: Evanston, Illinois
+  email: xiaochen2023@u.northwestern.edu
+  github: https://github.com/chenxiao2402
+  linkedin: https://linkedin.com/in/chenxiao2402
+  photo: /images/xiaochen.jpg
+  cv: /file/XiaoChen_CV.pdf
+  interests:
+    - Programming languages
+    - Gradual typing
+    - Parallelizing compilers
+home:
+  researchHeading: Research interests
+  educationHeading: Academic background
+  newsHeading: News and updates
+  contactHeading: Contact
+  contactText: Thank you very much for visiting my website.
+  educationNote: "I'm applying for 24 Fall PhD in *Programming Languages*."
+  contentUpdated: "2023-11-04"
+research:
+  - id: complete-monitoring
+    title: Complete monitoring
+    category: Gradual typing · Type integrity
+    body: |
+      Currently, my research revolves around [Complete Monitoring](https://www2.ccs.neu.edu/racket/pubs/esop12-dthf.pdf), a property that formalizes the flow of values in gradual typing systems using ownership annotations and propagation rules for ownership to help assess the quality of blame assignments for responsible components when a runtime type mismatch occurs. I've derived new syntactic techniques that help eliminate the necessity for ownership annotations by introducing collecting semantics, along with the rigorous proof to show the program behavior is preserved. The main focus in the future is to enhance the collecting semantics based on uniform rules about how locations are associated with types they must satisfy, so that we could not only track but also enforce the type integrity of the program.
+  - id: dynamic-semantics
+    title: Dynamic semantics
+    category: Type history · Runtime checking
+    body: |
+      Therefore, I'm working on a high-order dynamic semantics that could eagerly check inconsistency in the typing history of each value. Different from the [Amnesic](https://www2.ccs.neu.edu/racket/pubs/oopsla19-gfd.pdf) semantics, the type history is encoded in the memory instead of being explicitly recorded in the expression. This strategy makes this new semantics more efficient because the type history will be incrementally updated during evaluation, while being decoded and checked only when type mismatch actually happens.
+  - id: parallelizing-compilers
+    title: Parallelizing compilers
+    category: Program analysis · NOELLE
+    body: |
+      Previously, I worked on parallelizing compilers in the [NOELLE](https://github.com/arcana-lab/noelle) project, with the goal of mapping programs to a multicore platform gaining nontrivial speedup. Specifically, I implemented a new intraprocedural may points-to analysis, and integrated it into a privatizer that converts dynamic memory allocations and global variables into local variables while preserving program semantics to enable transformations only applicable to AllocaInsts.
+
+      In addition, this may points-to analysis helped remove overly conservative loop-carried memory dependencies in the program dependence graph to eliminate unnecessary synchronizations and achieve higher speedup for parallelization.
+education:
+  - institution: Indiana University Bloomington
+    degree: Ph.D. in Computer Science
+    location: Bloomington, IN, US
+    dates: Sep. 2024 - ?
+    logo: /images/iub.png
+  - institution: Northwestern University
+    degree: M.Sc in Computer Science
+    location: Evanston, IL, US
+    dates: Sep. 2022 - Jun. 2024
+    logo: /images/nwu.png
+  - institution: Nanjing University
+    degree: M.Eng in Electronic Information
+    location: Nanjing, Jiangsu, China
+    dates: Sep. 2020 - Jun. 2022
+    logo: /images/nju.png
+  - institution: Nanjing University
+    degree: B.Eng in Software Engineering
+    location: Nanjing, Jiangsu, China
+    dates: Sep. 2016 - Jun. 2020
+    logo: /images/nju.png
+news:
+  - date: "2023-10-06"
+    body: "I'm lucky enough to have some instructive talks with [Max](https://maxsnew.com/), [Eric](https://www-personal.umich.edu/~ericgio/index.html), [Edward](https://plg.uwaterloo.ca/~e45lee/), [Guannan](https://continuation.passing.style/) and [Pedro](https://pedroabreu0.github.io/) in the [Midwest PL Summit 2023](https://mwpls2023.engin.umich.edu/)."
+  - date: "2023-10-05"
+    body: "I'm gonna join the [Midwest PL Summit 2023](https://mwpls2023.engin.umich.edu/) tomorrow. Ann Arbor is a very beautiful city."
+  - date: "2023-09-22"
+    body: "My work has been completely merged into the [NOELLE](https://github.com/arcana-lab/noelle) project."
