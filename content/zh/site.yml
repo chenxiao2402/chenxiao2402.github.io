@@ -27,7 +27,6 @@ home:
   contactHeading: 联系方式
   contactText: 感谢访问我的个人网站。
   educationNote: 我正在申请 2024 年秋季入学的*程序设计语言*方向博士项目。
-  contentUpdated: "2023-11-04"
 research:
   - id: complete-monitoring
     title: 完全监控

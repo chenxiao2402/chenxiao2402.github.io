@@ -10,7 +10,7 @@ function social(profile) {
   return `${profile.github ? link(profile.github, 'GitHub') : ''}${profile.linkedin ? link(profile.linkedin, 'LinkedIn') : ''}`;
 }
 
-function shell(data, body, { page = 'home', language = 'en' } = {}) {
+function shell(data, body, { page = 'home', language = 'en', contentUpdated } = {}) {
   const p = data.profile;
   const ui = UI[language];
   const homepage = language === 'zh' ? '/?lang=zh' : '/';
@@ -34,8 +34,8 @@ function shell(data, body, { page = 'home', language = 'en' } = {}) {
   </header>
   <main id="main">${body}</main>
   <footer class="site-footer wrap">
-    <span>© ${new Date().getUTCFullYear()} ${e(p.name)} <span class="footer-native" lang="${language === 'zh' ? 'en' : 'zh-CN'}">${e(p.nativeName)}</span></span>
-    <span>${ui.contentUpdated} <time datetime="${e(data.home.contentUpdated)}">${dateLabel(data.home.contentUpdated, language)}</time></span>
+    <span>© ${contentUpdated.slice(0, 4)} ${e(p.name)} <span class="footer-native" lang="${language === 'zh' ? 'en' : 'zh-CN'}">${e(p.nativeName)}</span></span>
+    <span>${ui.contentUpdated} <time datetime="${contentUpdated}">${dateLabel(contentUpdated, language)}</time></span>
     <div><a href="${language === 'zh' ? '/feed-zh.xml' : '/feed.xml'}">RSS ${arrow}</a><a href="https://github.com/chenxiao2402/chenxiao2402.github.io">${ui.source} ${arrow}</a><a href="#main">${ui.backToTop} ↑</a></div>
   </footer>`;
 }
@@ -65,7 +65,7 @@ function home(bundle, language) {
   </section>
   ${data.education.length ? `<section class="education-section section-space" id="education" aria-labelledby="education-title"><div class="wrap split-section">
     <div class="section-intro"><h2 id="education-title">${e(h.educationHeading)}</h2>${h.educationNote ? `<div class="education-note">${md(h.educationNote)}</div>` : ''}</div>
-    <div class="education-list">${data.education.map(r => `<article class="education-row"><p class="education-dates">${e(r.dates)}</p><div class="school-logo">${r.logo ? `<img src="${e(r.logo)}" alt="" width="48" height="48" loading="lazy">` : ''}</div><div class="education-details"><h3>${e(r.institution)} <span class="muted education-location">${e(r.location)}</span></h3><p>${e(r.degree)}</p></div></article>`).join('')}</div>
+    <div class="education-list">${data.education.map(r => `<article class="education-row"><div class="school-logo">${r.logo ? `<img src="${e(r.logo)}" alt="" width="48" height="48" loading="lazy">` : ''}</div><div class="education-content"><h3>${e(r.institution)}</h3><div class="education-details"><p class="education-degree">${e(r.degree)}</p><p class="muted education-location">${e(r.location)}</p></div></div><p class="education-dates">${e(r.dates)}</p></article>`).join('')}</div>
   </div></section>` : ''}
   <section class="updates-section wrap section-space split-section" id="updates" aria-labelledby="updates-title">
     <div class="section-intro"><h2 id="updates-title">${e(h.newsHeading)}</h2></div>
@@ -74,12 +74,12 @@ function home(bundle, language) {
   <section class="contact-section wrap" aria-labelledby="contact-title"><h2 id="contact-title">${e(h.contactHeading)}</h2><p>${e(h.contactText)}</p><div class="contact-links"><a href="mailto:${e(p.email)}">${e(p.email)}</a>${social(p)}</div></section>`;
 }
 
-function layout(bundles, page = 'home') {
+function layout(bundles, contentUpdated, page = 'home') {
   const versions = Object.fromEntries(Object.entries(bundles).map(([language, bundle]) => {
     const { data } = bundle;
     const ui = UI[language];
     const body = page === 'home' ? home(bundle, language) : `<section class="wrap not-found"><p class="eyebrow">${ui.missingLabel}</p><h1>${ui.missingTitle}</h1><p>${ui.missingText}</p>${link(language === 'zh' ? '/?lang=zh' : '/', ui.backHome, 'button')}</section>`;
-    return [language, { html: shell(data, body, { page, language }), lang: data.site.language,
+    return [language, { html: shell(data, body, { page, language, contentUpdated }), lang: data.site.language,
       title: page === 'home' ? data.site.title : `${ui.missingBrowserTitle} · ${data.profile.name}`,
       description: data.site.description, image: new URL(data.profile.photo, data.site.url).href,
       feed: language === 'zh' ? '/feed-zh.xml' : '/feed.xml', feedTitle: `${data.profile.name} · ${ui.updates}`,
@@ -126,8 +126,10 @@ function feed(bundle, language) {
   return `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>${e(data.profile.name)} · ${UI[language].updates}</title><link>${e(homepage)}</link><description>${e(data.site.description)}</description><language>${e(data.site.language)}</language>${[...data.news].sort((a,b) => b.date.localeCompare(a.date)).map((n,i) => `<item><title>${UI[language].updates} · ${dateLabel(n.date, language)}</title><link>${e(homepage)}#updates</link><guid isPermaLink="false">${e(base)}:${language}:news:${n.date}:${i}</guid><pubDate>${new Date(`${n.date}T12:00:00Z`).toUTCString()}</pubDate><description>${e(md(n.body))}</description></item>`).join('')}</channel></rss>`;
 }
 
-export async function build({ root = ROOT, bundle, language = 'en', out = path.join(root, 'dist') } = {}) {
+export async function build({ root = ROOT, bundle, language = 'en', out = path.join(root, 'dist'), now = new Date() } = {}) {
   if (!['en', 'zh'].includes(language)) throw new Error('Unsupported language.');
+  // Stamp the static output once, consistently on local machines and GitHub runners.
+  const contentUpdated = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).format(now);
   const bundles = Object.fromEntries(await Promise.all(['en', 'zh'].map(async code => [code, validate(code === language && bundle ? bundle : await readContent(root, code))])));
   for (const [code, content] of Object.entries(bundles)) {
     if (content.data.site.language !== (code === 'zh' ? 'zh-CN' : 'en')) throw new Error(`${code}: the page language must be ${code === 'zh' ? 'zh-CN' : 'en'}.`);
@@ -143,7 +145,7 @@ export async function build({ root = ROOT, bundle, language = 'en', out = path.j
     for (const file of ['site.css', 'site.js', 'theme.js']) await cp(path.join(root, 'src', file), path.join(staging, 'assets', file));
     const base = data.site.url.replace(/\/$/, '');
     await Promise.all(Object.entries({
-      'index.html': layout(bundles), '404.html': layout(bundles, '404'),
+      'index.html': layout(bundles, contentUpdated), '404.html': layout(bundles, contentUpdated, '404'),
       'feed.xml': feed(bundles.en, 'en'), 'feed-zh.xml': feed(bundles.zh, 'zh'),
       'sitemap.xml': `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${e(base)}/</loc></url></urlset>`,
       'robots.txt': `User-agent: *\nAllow: /\nSitemap: ${base}/sitemap.xml\n`,

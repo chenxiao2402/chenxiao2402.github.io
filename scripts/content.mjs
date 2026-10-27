@@ -47,8 +47,7 @@ export function validate(bundle) {
   if (!/^[^\s<>@]+@[^\s<>@]+\.[^\s<>@]+$/.test(data.profile.email)) throw new Error('Enter a valid email address.');
   for (const key of ['github', 'linkedin', 'photo', 'cv']) if (data.profile[key] && !safeURL(data.profile[key])) throw new Error(`Profile: invalid ${key} URL.`);
   if (!Array.isArray(data.profile.interests) || data.profile.interests.some(x => typeof x !== 'string' || !x.trim())) throw new Error('Interests must be a list of nonempty text labels.');
-  for (const key of ['researchHeading', 'educationHeading', 'newsHeading', 'contactHeading', 'contactText', 'educationNote', 'contentUpdated']) required(data.home, key, 'Homepage', key === 'educationNote');
-  checkDate(data.home.contentUpdated, 'Last updated');
+  for (const key of ['researchHeading', 'educationHeading', 'newsHeading', 'contactHeading', 'contactText', 'educationNote']) required(data.home, key, 'Homepage', key === 'educationNote');
   for (const key of ['about', 'researchIntro']) required(bundle, key, 'Content');
   for (const [collection, fields] of Object.entries({research: ['id', 'title', 'category', 'body'], education: ['institution', 'degree', 'location', 'dates', 'logo'], news: ['date', 'body']})) {
     if (!Array.isArray(data[collection])) throw new Error(`${collection} must be a list.`);

@@ -10,7 +10,7 @@ const sections = {
   research: ['Research', 'Add research topics, change their descriptions, and choose the order.'],
   education: ['Education', 'One entry per row. Keep entries in reverse chronological order, newest first, using the move buttons.'],
   news: ['Updates', 'News is displayed newest first. Add an update whenever you have something to share.'],
-  home: ['Page settings', 'Headings, the education highlight, last-updated date, and search engine details.'],
+  home: ['Page settings', 'Headings, the education highlight, and search engine details.'],
 };
 function status(text, type = '') { $('#status').textContent = text; $('#status').className = type; }
 function changed() { dirty = true; $('#save').disabled = busy; $('#save').textContent = 'Save & preview'; status('You have unsaved changes.', 'pending'); }
@@ -98,8 +98,8 @@ function render() {
   } else if (section === 'about') {
     help(form); field(form, 'About you', model.about, value => { model.about = value; }, { area: true, long: true });
   } else if (section === 'home') {
-    const fields = [['researchHeading','Research heading'], ['educationHeading','Education heading'], ['newsHeading','Updates heading'], ['contactHeading','Contact heading'], ['contactText','Contact message'], ['educationNote','Education highlight (optional)'], ['contentUpdated','Content last updated']];
-    for (const [key,label] of fields) field(form, label, model.data.home[key], value => { model.data.home[key] = value; }, key === 'contentUpdated' ? { type: 'date' } : {});
+    const fields = [['researchHeading','Research heading'], ['educationHeading','Education heading'], ['newsHeading','Updates heading'], ['contactHeading','Contact heading'], ['contactText','Contact message'], ['educationNote','Education highlight (optional)']];
+    for (const [key,label] of fields) field(form, label, model.data.home[key], value => { model.data.home[key] = value; });
     for (const [key,label] of [['title','Browser title'],['description','Search engine description'],['url','Website URL']]) field(form, label, model.data.site[key], value => { model.data.site[key] = value; });
   } else {
     help(form);

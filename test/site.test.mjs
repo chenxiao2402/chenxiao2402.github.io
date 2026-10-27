@@ -74,6 +74,30 @@ test('build preserves content and resolves local links and anchors', async t => 
   assert.match(await readFile(path.join(out, 'feed-zh.xml'), 'utf8'), /<language>zh-CN<\/language>/);
   await assert.rejects(access(path.join(out, 'editor'))); await assert.rejects(access(path.join(out, 'content')));
 });
+test('footer records the latest build date in Shanghai for both languages and pages', async t => {
+  const root = await fixture(t);
+  const sourceBefore = await readFile(path.join(root, 'content/site.yml'), 'utf8');
+  const bundle = await readContent(root);
+  // Older content files may still contain a manual date; it must not override the build date.
+  bundle.data.home.contentUpdated = '2000-01-01';
+  for (const [instant, date, english, chinese] of [
+    ['2026-12-31T15:59:59Z', '2026-12-31', 'Dec 31, 2026', '2026年12月31日'],
+    ['2026-12-31T16:00:00Z', '2027-01-01', 'Jan 1, 2027', '2027年1月1日'],
+  ]) {
+    const out = await build({ root, bundle, now: new Date(instant) });
+    for (const file of ['index.html', '404.html']) {
+      const html = await readFile(path.join(out, file), 'utf8');
+      const versions = JSON.parse(html.match(/<script id="language-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
+      for (const [markup, label] of [[html, english], [versions.en.html, english], [versions.zh.html, chinese]]) {
+        const footer = markup.match(/<footer[\s\S]*?<\/footer>/)[0];
+        assert.ok(footer.includes(`<time datetime="${date}">${label}</time>`));
+        assert.ok(footer.includes(`© ${date.slice(0, 4)}`));
+        assert.ok(!footer.includes('2000-01-01'));
+      }
+    }
+  }
+  assert.equal(await readFile(path.join(root, 'content/site.yml'), 'utf8'), sourceBefore);
+});
 test('invalid content fails clearly and preserves the last good build', async t => {
   const root = await fixture(t); await build({ root });
   const before = await readFile(path.join(root, 'dist/index.html'), 'utf8');

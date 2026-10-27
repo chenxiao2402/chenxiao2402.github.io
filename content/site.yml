@@ -27,7 +27,6 @@ home:
   contactHeading: Contact
   contactText: Thank you very much for visiting my website.
   educationNote: "I'm applying for 24 Fall PhD in *Programming Languages*."
-  contentUpdated: "2023-11-04"
 research:
   - id: complete-monitoring
     title: Complete monitoring

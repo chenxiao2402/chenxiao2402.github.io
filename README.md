@@ -75,9 +75,9 @@ Write ordinary paragraphs. Optional Markdown formatting:
 [a link](https://example.com)
 ```
 
-Leave a blank line between paragraphs. Raw HTML is displayed as text, so you never need HTML tags. News dates and the content-updated date use `YYYY-MM-DD`. Research IDs use lowercase letters, numbers, and hyphens; an ID of `complete-monitoring` links to `/#research-complete-monitoring`. Keep an ID stable to preserve links to that topic. Education appears one entry per row, newest first; use the move buttons to maintain reverse chronological order. Lists can be empty. Clear the education highlight to remove it.
+Leave a blank line between paragraphs. Raw HTML is displayed as text, so you never need HTML tags. News dates use `YYYY-MM-DD`. Research IDs use lowercase letters, numbers, and hyphens; an ID of `complete-monitoring` links to `/#research-complete-monitoring`. Keep an ID stable to preserve links to that topic. Education appears one entry per row, newest first; use the move buttons to maintain reverse chronological order. Lists can be empty. Clear the education highlight to remove it.
 
-The **Content last updated** field is yours to set. Building the website does not make old biographical information look newly verified.
+The footer's **Content updated / 内容更新于** date is automatic: each build records its date in the **Asia/Shanghai** timezone for both languages. Saving in the editor, running `./build.sh`, or publishing through GitHub Actions refreshes it. The published date stays fixed until the next build; there is no date field to maintain.
 
 ## Installation details
 
