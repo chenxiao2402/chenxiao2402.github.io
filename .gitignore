@@ -7,3 +7,7 @@ dist.staging/
 .idea/
 *.log
 
+# latex
+*.aux
+*.out
+*.synctex.gz
