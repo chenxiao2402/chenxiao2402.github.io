@@ -1,0 +1,15 @@
+Migratory Typing for Algebraic Effects and Handlers
+
+How can statically checked effect guarantees remain meaningful when typed code interacts with untyped code? I investigate this question through a Typed Racket extension that combines algebraic effect handlers, effect-row polymorphism, and runtime contracts. The project connects source-level reasoning about effects with their implementation using delimited continuations.
+
+The current prototype contributes:
+
+Effect typing integrated into Typed Racket. The extension tracks effects during expression checking and through function and handler types. It supports explicitly instantiated effect-row polymorphism, including polymorphic functions crossing typed/untyped module boundaries.
+
+Contracts for escaping effects. Runtime contracts distinguish operations handled locally from operations that escape across a protected boundary. They compose with ordinary value contracts to check effect allowances and operation payloads and responses, while accounting for handler forwarding and continuation resumption.
+
+Module-aware effect interoperability. Effect declarations carry binding-associated static information through Racket’s module system, preserving operation identity across imports, renaming, and re-exports. This connects separate compilation and lexical scope with both static effect checking and runtime contract generation.
+
+Ongoing formal work develops two complementary accounts: a high-level calculus for migratory typing with effect handlers, and a lower-level calculus exposing the continuation and contract mechanisms used by the implementation. The intended results are type and effect soundness, together with a behavioral correspondence between the two levels.
+
+A central next step is effect-row parametricity across typed/untyped boundaries. Beyond checking an instantiated set of permitted operations, I want to preserve abstraction over unknown effects, including protection against unintended interception by handlers. The broader goal is a principled account of how effect abstractions can survive interaction with untyped code and be faithfully realized in an existing language runtime.

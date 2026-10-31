@@ -4,10 +4,17 @@ import { pathToFileURL } from 'node:url';
 import { ROOT, readContent, validate, validateAssets, escape as e, md, dateLabel } from './content.mjs';
 import { UI } from './i18n.mjs';
 
-const arrow = '<span aria-hidden="true">↗</span>';
-const link = (url, label, cls = '') => `<a class="${cls}" href="${e(url)}">${label}${arrow}</a>`;
+const link = (url, label, cls = '') => `<a class="${cls}" href="${e(url)}">${label}</a>`;
 function social(profile) {
-  return `${profile.github ? link(profile.github, 'GitHub') : ''}${profile.linkedin ? link(profile.linkedin, 'LinkedIn') : ''}`;
+  return profile.github ? link(profile.github, 'GitHub') : '';
+}
+function researchList(projects, { collapsible = false, ui } = {}) {
+  return `<div class="research-list">${projects.map(r => {
+    const title = `<h3>${e(r.title)}</h3>`;
+    const description = `<p class="research-category" lang="en">${e(r.category)}</p>${r.status?.trim() ? `<p class="research-status">${e(r.status)}</p>` : ''}<div class="prose" lang="en">${md(r.body)}</div>`;
+    const content = collapsible ? `<details class="past-research-details"><summary><h3><span>${e(r.title)}</span><span class="research-toggle-label"><span class="research-show">${ui.showDetails}</span><span class="research-hide">${ui.hideDetails}</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></span></h3></summary><div class="past-research-body">${description}</div></details>` : `${title}${description}`;
+    return `<article class="research-row" id="research-${e(r.id)}">${content}</article>`;
+  }).join('')}</div>`;
 }
 
 function shell(data, body, { page = 'home', language = 'en', contentUpdated } = {}) {
@@ -21,8 +28,8 @@ function shell(data, body, { page = 'home', language = 'en', contentUpdated } = 
     <nav aria-label="${ui.navigation}">
       <a href="${sectionURL('about')}">${ui.about}</a>
       <a href="${sectionURL('research')}">${ui.research}</a>
-      <a href="${sectionURL('updates')}">${ui.updates}</a>
-      <a href="${e(p.cv)}" aria-label="${ui.cvLabel}">${ui.cv} ${arrow}</a>
+      <a href="${sectionURL('misc')}">${ui.misc}</a>
+      <a href="${e(p.cv)}" aria-label="${ui.cvLabel}">${ui.cv}</a>
     </nav>
     <div class="header-controls">
       <div class="language-switch" hidden>
@@ -36,7 +43,7 @@ function shell(data, body, { page = 'home', language = 'en', contentUpdated } = 
   <footer class="site-footer wrap">
     <span>© ${contentUpdated.slice(0, 4)} ${e(p.name)} <span class="footer-native" lang="${language === 'zh' ? 'en' : 'zh-CN'}">${e(p.nativeName)}</span></span>
     <span>${ui.contentUpdated} <time datetime="${contentUpdated}">${dateLabel(contentUpdated, language)}</time></span>
-    <div><a href="${language === 'zh' ? '/feed-zh.xml' : '/feed.xml'}">RSS ${arrow}</a><a href="https://github.com/chenxiao2402/chenxiao2402.github.io">${ui.source} ${arrow}</a><a href="#main">${ui.backToTop} ↑</a></div>
+    <div><a href="https://github.com/chenxiao2402/chenxiao2402.github.io">${ui.source}</a><a href="#main">${ui.backToTop}</a></div>
   </footer>`;
 }
 
@@ -50,28 +57,31 @@ function home(bundle, language) {
       <h1 id="intro-title">${e(p.name)} <span class="native-name" lang="${language === 'zh' ? 'en' : 'zh-CN'}">${e(p.nativeName)}</span></h1>
       <p class="hero-role">${e(p.role)}</p>
       <div class="prose about-copy">${md(about)}</div>
-      <div class="hero-actions">${link(`mailto:${p.email}`, ui.email, 'text-link')}${social(p)}${link(p.cv, ui.cvPDF, 'text-link')}</div>
     </div>
     <aside class="portrait-panel" aria-label="${ui.profile}">
       <div class="portrait-frame"><img src="${e(p.photo)}" alt="${ui.portrait} ${e(p.name)}" width="1952" height="2603" fetchpriority="high"></div>
       <div class="portrait-caption"><strong>${e(p.affiliation)}</strong><span>${e(p.location)}</span></div>
+      <div class="portrait-links">${link(`mailto:${p.email}`, e(p.email), 'text-link')}${social(p)}${link(p.cv, ui.cvPDF, 'text-link')}</div>
     </aside>
   </section>
   <div class="interest-strip wrap"><span>${ui.interests}</span><ul>${p.interests.map(x => `<li>${e(x)}</li>`).join('')}</ul></div>
   <section class="research-section wrap section-space" id="research" aria-labelledby="research-title">
     <h2 id="research-title">${e(h.researchHeading)}</h2>
-    <div class="prose research-intro">${md(researchIntro)}</div>
-    <div class="research-list">${data.research.map(r => `<article class="research-row" id="research-${e(r.id)}"><h3>${e(r.title)}</h3><p class="research-category">${e(r.category)}</p><div class="prose">${md(r.body)}</div></article>`).join('')}</div>
+    <div class="prose research-intro" lang="en">${md(researchIntro)}</div>
+    ${researchList(data.research)}
   </section>
+  ${data.pastResearch.length ? `<section class="past-research-section wrap section-space" id="past-research" aria-labelledby="past-research-title">
+    <h2 id="past-research-title">${e(h.pastResearchHeading)}</h2>
+    ${researchList(data.pastResearch, { collapsible: true, ui })}
+  </section>` : ''}
   ${data.education.length ? `<section class="education-section section-space" id="education" aria-labelledby="education-title"><div class="wrap split-section">
     <div class="section-intro"><h2 id="education-title">${e(h.educationHeading)}</h2>${h.educationNote ? `<div class="education-note">${md(h.educationNote)}</div>` : ''}</div>
     <div class="education-list">${data.education.map(r => `<article class="education-row"><div class="school-logo">${r.logo ? `<img src="${e(r.logo)}" alt="" width="48" height="48" loading="lazy">` : ''}</div><div class="education-content"><h3>${e(r.institution)}</h3><div class="education-details"><p class="education-degree">${e(r.degree)}</p><p class="muted education-location">${e(r.location)}</p></div></div><p class="education-dates">${e(r.dates)}</p></article>`).join('')}</div>
   </div></section>` : ''}
-  <section class="updates-section wrap section-space split-section" id="updates" aria-labelledby="updates-title">
-    <div class="section-intro"><h2 id="updates-title">${e(h.newsHeading)}</h2></div>
-    <div class="updates-list">${data.news.length ? [...data.news].sort((a,b) => b.date.localeCompare(a.date)).map(n => `<article class="update"><time datetime="${e(n.date)}">${dateLabel(n.date, language)}</time><div class="prose">${md(n.body)}</div></article>`).join('') : `<p class="muted">${ui.emptyNews}</p>`}</div>
-  </section>
-  <section class="contact-section wrap" aria-labelledby="contact-title"><h2 id="contact-title">${e(h.contactHeading)}</h2><p>${e(h.contactText)}</p><div class="contact-links"><a href="mailto:${e(p.email)}">${e(p.email)}</a>${social(p)}</div></section>`;
+  <section class="misc-section wrap section-space" id="misc" aria-labelledby="misc-title">
+    <h2 id="misc-title">${e(h.miscHeading)}</h2>
+    <div class="prose">${md(data.misc)}</div>
+  </section>`;
 }
 
 function layout(bundles, contentUpdated, page = 'home') {
@@ -82,7 +92,6 @@ function layout(bundles, contentUpdated, page = 'home') {
     return [language, { html: shell(data, body, { page, language, contentUpdated }), lang: data.site.language,
       title: page === 'home' ? data.site.title : `${ui.missingBrowserTitle} · ${data.profile.name}`,
       description: data.site.description, image: new URL(data.profile.photo, data.site.url).href,
-      feed: language === 'zh' ? '/feed-zh.xml' : '/feed.xml', feedTitle: `${data.profile.name} · ${ui.updates}`,
       darkTheme: ui.darkTheme, lightTheme: ui.lightTheme }];
   }));
   const initial = versions.en;
@@ -106,7 +115,6 @@ function layout(bundles, contentUpdated, page = 'home') {
   <meta property="og:image" content="${e(initial.image)}">
   <meta name="twitter:card" content="summary">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-  <link rel="alternate" type="application/rss+xml" title="${e(initial.feedTitle)}" href="${initial.feed}">
   <script src="/assets/theme.js"></script>
   <link rel="stylesheet" href="/assets/site.css">
   <script defer src="/assets/site.js"></script>
@@ -117,13 +125,6 @@ function layout(bundles, contentUpdated, page = 'home') {
   <script id="language-data" type="application/json">${languageData}</script>
 </body>
 </html>`;
-}
-
-function feed(bundle, language) {
-  const { data } = bundle;
-  const base = data.site.url.replace(/\/$/, '');
-  const homepage = `${base}/${language === 'zh' ? '?lang=zh' : ''}`;
-  return `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>${e(data.profile.name)} · ${UI[language].updates}</title><link>${e(homepage)}</link><description>${e(data.site.description)}</description><language>${e(data.site.language)}</language>${[...data.news].sort((a,b) => b.date.localeCompare(a.date)).map((n,i) => `<item><title>${UI[language].updates} · ${dateLabel(n.date, language)}</title><link>${e(homepage)}#updates</link><guid isPermaLink="false">${e(base)}:${language}:news:${n.date}:${i}</guid><pubDate>${new Date(`${n.date}T12:00:00Z`).toUTCString()}</pubDate><description>${e(md(n.body))}</description></item>`).join('')}</channel></rss>`;
 }
 
 export async function build({ root = ROOT, bundle, language = 'en', out = path.join(root, 'dist'), now = new Date() } = {}) {
@@ -146,7 +147,6 @@ export async function build({ root = ROOT, bundle, language = 'en', out = path.j
     const base = data.site.url.replace(/\/$/, '');
     await Promise.all(Object.entries({
       'index.html': layout(bundles, contentUpdated), '404.html': layout(bundles, contentUpdated, '404'),
-      'feed.xml': feed(bundles.en, 'en'), 'feed-zh.xml': feed(bundles.zh, 'zh'),
       'sitemap.xml': `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${e(base)}/</loc></url></urlset>`,
       'robots.txt': `User-agent: *\nAllow: /\nSitemap: ${base}/sitemap.xml\n`,
       '.nojekyll': '',

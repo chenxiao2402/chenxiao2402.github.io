@@ -1,59 +1,149 @@
-# 中文内容。运行 ./edit.sh，在编辑器中选择“中文”即可修改。
-# 按现有英文内容翻译，保留原有日期及尚未更新的个人信息。
+# Edit with ./edit.sh, or edit this plain-text file directly.
 site:
   title: 陈骁 · 程序设计语言
-  description: 陈骁（Xiao Chen），研究方向包括程序设计语言、渐进类型系统、程序分析与并行化编译器。
+  description: 陈骁（Xiao Chen），印第安纳大学布卢明顿分校计算机科学博士生，研究渐进类型、操作语义与效应处理器。正在寻找美国以外地区、2027 年入学的全额资助博士机会。
   url: https://chenxiao2402.github.io
   language: zh-CN
 profile:
   name: 陈骁
-  nativeName: Xiao Chen
-  role: 计算机科学硕士二年级学生
-  affiliation: 美国西北大学
-  location: 美国伊利诺伊州埃文斯顿
-  email: xiaochen2023@u.northwestern.edu
+  nativeName: Chen, Xiao
+  role: 计算机科学博士生
+  affiliation: 印第安纳大学布卢明顿分校
+  location: 美国印第安纳州布卢明顿
+  email: xc56@iu.edu
   github: https://github.com/chenxiao2402
-  linkedin: https://linkedin.com/in/chenxiao2402
   photo: /images/xiaochen.jpg
   cv: /file/XiaoChen_CV.pdf
   interests:
     - 程序设计语言
     - 渐进类型
-    - 并行化编译器
+    - 效应处理器
+    - 形式化验证
 home:
-  researchHeading: 研究方向
+  researchHeading: 在研项目
+  pastResearchHeading: 过往研究活动
   educationHeading: 教育经历
-  newsHeading: 近况与动态
-  contactHeading: 联系方式
-  contactText: 感谢访问我的个人网站。
-  educationNote: 我正在申请 2024 年秋季入学的*程序设计语言*方向博士项目。
+  miscHeading: 其他
+  educationNote: ""
 research:
-  - id: complete-monitoring
-    title: 完全监控
-    category: 渐进类型 · 类型完整性
-    body: |
-      目前，我的研究围绕[完全监控（Complete Monitoring）](https://www2.ccs.neu.edu/racket/pubs/esop12-dthf.pdf)展开。这一性质使用所有权标注及其传播规则，对渐进类型系统中值的流动进行形式化描述，从而帮助评估：在运行时发生类型不匹配时，责任归因是否准确地指向了应负责的程序组件。
+  - id: types-as-obligations
+    title: 类型即义务（Type as Obligations）
+    category: Migratory Typing · Interoperability · Type Obligations · Blame Theorems · Bisimulation · Vigilance · Formal Verification
+    status: Rocq 机械化证明已完成；论文撰写中。
+    body: |-
+      Languages that combine static and dynamic typing use different runtime enforcement strategies: some wrap values in contracts, some merge casts, and others insert shallow checks. These choices affect not only type safety but also which boundary violations are detected and whether blame identifies the responsible boundaries. Comparing these guarantees is difficult when each semantics is analyzed using different definitions and proof techniques.
 
-      我提出了新的句法技术，通过引入收集语义（collecting semantics）来消除对所有权标注的依赖，并严格证明了这一方法保持程序行为不变。未来的重点是进一步完善收集语义，用统一的规则描述内存位置与其必须满足的类型之间的关联，从而不仅能够跟踪，还能够强制保证程序的类型完整性。
-  - id: dynamic-semantics
-    title: 动态语义
-    category: 类型历史 · 运行时检查
-    body: |
-      在此基础上，我正在研究一种高阶动态语义，以便及早检查每个值的类型历史中是否存在不一致。与 [Amnesic 语义](https://www2.ccs.neu.edu/racket/pubs/oopsla19-gfd.pdf)不同，这一方法将类型历史编码在内存中，而不是显式记录在表达式里。
+      My work develops **Type as Obligations (TAO)**, a common framework for formalizing these guarantees. Its central idea is to distinguish **what a program owes to its types** from **how a particular semantics enforces those requirements**.
 
-      这种策略使新的语义更加高效：类型历史在求值过程中增量更新，只有当类型不匹配实际发生时，才进行解码和检查。
+      Previous work on [**vigilance**](https://doi.org/10.1145/3649842) provides a related perspective: values should respect their runtime typing histories, not merely their final types. However, vigilance characterizes this requirement through a logical relation indexed by a proof-level typing history, leaving blame outside its analysis. **My framework reifies typing-history obligations into an explicit obligation store, maintained by an executable profiler semantics.** This makes the propagation and violation of obligations directly inspectable and brings type enforcement and blame into the same analysis.
+
+      #### Core Contributions
+
+      **1. A uniform, executable profiler semantics for type obligations.**
+
+      I introduce a profiler semantics that records the typing history of values, i.e., the type-induced boundaries they have crossed. Type obligations originate at these typed–untyped boundaries and propagate through function arguments, results, and pair projections, including higher-order interactions where runtime proxies are created, merged, or discarded. This provides a common basis for defining obligation soundness and blame correctness independently of a particular enforcement mechanism.
+
+      The profiler also makes counterexamples operationally explainable. A language designer can execute a program and inspect which requirements were violated, how they reached the affected value, and whether the reported blame matches the violated obligations. This exposes enforcement failures even when ordinary evaluation returns successfully.
+
+      **2. Mechanical construction of the profiler semantics, with a proof of bidirectional correspondence.**
+
+      For ordinary semantics expressed through TAO’s common interface, TAO mechanically constructs the corresponding profiler semantics by intercepting reduction steps, inserting profiling commands at appropriate points, and delegating the computational reductions back to the ordinary semantics. Individual programs require no manual instrumentation; the framework determines where obligations must be recorded and propagated.
+
+      Moreover, I prove a bidirectional correspondence between ordinary and profiler evaluation. The correspondence accommodates additional obligation-bookkeeping steps and differences in allocated locations between the two semantics. In particular, a well-typed, uniquely labeled source program terminates with a resolved value in the ordinary semantics exactly when it terminates with that same value in the profiler semantics.
+
+      This bidirectional correspondence theorem justifies using the profiler semantics to reason about ordinary evaluation. On the one hand, **“profiler evaluation implies ordinary evaluation”** shows that the profiler faithfully simulates ordinary evaluation without introducing behavior, apart from additional obligation-bookkeeping steps. On the other hand, **“ordinary evaluation implies profiler evaluation”** ensures that the profiler captures ordinary evaluation without omitting behavior; such omissions would limit the conclusions drawn from the profiler. Thus, the profiler supports reasoning about the original semantics rather than replacing it with a different computation.
+
+      **3. Obligation soundness: a new enforcement criterion that implies type soundness.**
+
+      We propose obligation soundness for ordinary migratory typing semantics: throughout the profiler evaluation of any valid input program, no intermediate value may violate its type obligations. Although obligation soundness is a property of the ordinary semantics, it is defined using the type obligations recorded across all possible profiler evaluations. This definition is supported by the bidirectional correspondence theorem, which connects ordinary and profiler evaluation in both directions.
+
+      I prove that **obligation soundness implies type soundness**. The converse does not hold: a type-sound semantics may preserve a value’s final type while discarding that value’s typing history. This distinguishes returning a correctly typed result from respecting the requirements imposed throughout execution.
+
+      **4. Blame correctness: a new ground truth for blame theorems.**
+
+      We also propose a new criterion for blame theorems, using violated obligations as the ground truth for blame assignment.
+
+      An obligation violation represents an unfulfilled duty; its recorded boundary provenance identifies a candidate for blame. Accordingly, **blame soundness** means that blamed boundaries correspond to a subsequence of violated obligations, while **blame completeness** means that violated obligations correspond to a subsequence of the blamed boundaries. An ordinary semantics is **blame correct** if and only if it is both blame sound and blame complete.
+
+      **5. A formal comparison of four enforcement strategies.**
+
+      We apply TAO to four enforcement strategies for migratory typing: [**Natural**](https://doi.org/10.1145/1176617.1176755), [**Threesomes**](https://doi.org/10.1145/1706299.1706342), [**Forgetful**](https://doi.org/10.1145/2676726.2676967), and [**Transient**](https://doi.org/10.1145/3359619.3359742). Using the same property definitions, we establish both positive results and explicit counterexamples for the modeled semantics:
+
+      | Strategy | Type Soundness | Obligation Soundness | Blame Soundness | Blame Completeness |
+      |---|---|---|---|---|
+      | Natural | Yes | Yes | Yes | Yes |
+      | Threesomes | Yes | Yes | No | Yes |
+      | Forgetful | Yes | No | Yes | No |
+      | Transient | No | No | Yes | No |
+
+      These results reveal substantive differences. Natural, a standard proxy-based strategy, enforces all type obligations and assigns blame correctly. Threesomes’ cast merging can report a conflict before an obligation is actually violated. Forgetful preserves result typing but loses obligation enforcement and blame completeness because it discards intermediate proxies. Transient does not use proxies to project untyped values or record their typing histories, which weakens its enforcement.
+
+      **6. Mechanized metatheory and an executable model.**
+
+      The framework, metatheory, and counterexamples are formalized in **Rocq/Coq**, with an accompanying executable **Racket/Redex** model. The broader contribution is a common semantic account that makes the guarantees of different enforcement strategies explicit, comparable, and machine-checked, while making their failures accessible through execution.
+  - id: migratory-typing-effects
+    title: 代数效应与处理器的迁移式类型系统
+    category: Migratory Typing · Interoperability · Effect Handlers · Typed Racket · Runtime Contracts
+    status: 原型已实现；形式语义与证明工作进行中。
+    body: |-
+      Algebraic effect handlers separate a computation’s requests from their interpretation. A computation can request an operation, such as reading input or choosing between alternatives, while an enclosing handler determines how to respond and whether to resume the computation. An effect system statically describes which operations may escape a computation and require handling by its surrounding context.
+
+      These guarantees become harder to maintain when typed code interacts with untyped code. A function declared to perform only input operations might call an untyped function that unexpectedly performs an output operation. Checking ordinary argument and result types does not detect this violation. Moreover, an effect request can pass through several function calls and module boundaries before reaching its handler.
+
+      My work investigates how to enforce effect specifications in this mixed setting of migratory typing. I am extending Typed Racket, which supports interoperability between statically typed and dynamically typed modules, with effect typing and runtime contracts. The project connects source-level effect guarantees with their realization using delimited continuations.
+
+      #### Core Contributions
+
+      **1. Retrofitting effect typing into an existing typed language.**
+
+      The prototype extends Typed Racket’s type checker to track both the values that expressions produce and the effects those expressions may perform. Function types describe the effects of calling a function; handler types describe the effects a handler handles, the result it produces, and the effects that may remain afterward.
+
+      This information must survive the existing compiler pipeline, including higher-order function calls, polymorphic instantiation, and module imports. The implementation integrates effect information into these mechanisms, allowing typed programs to check effectful computations while continuing to use Racket’s existing language infrastructure.
+
+      **2. Runtime contracts that enforce escaping-effect specifications.**
+
+      I implement contracts that monitor effect requests as they cross protected boundaries. For example, a function contracted to allow only a `read` effect is rejected if a `write` request escapes its execution, even when an outer handler could handle that request. Conversely, an operation handled entirely inside the function does not violate its external effect specification.
+
+      The central challenge is deciding which boundaries an operation actually crosses. Handler forwarding and continuation resumption complicate this accounting: resuming a suspended computation should not automatically attribute that computation’s effects to the handler implementation.
+
+      The contracts use Racket’s continuation mechanisms to maintain this distinction. Separate contract components check effect allowances and the values exchanged through operations and handlers. These contracts are available as a reusable library, while Typed Racket generates them from boundary types.
+
+      **3. Effect declarations that work across module boundaries.**
+
+      Effects must retain their identity when separately defined components interact. A handler imported from one module must recognize the same operation performed in another, including when imports are renamed or re-exported.
+
+      The prototype associates an effect declaration’s static information with its lexical binding and carries that information through Racket’s module system. This connects the operation known to the type checker with the operation recognized by the runtime, allowing effectful components to be organized and reused through ordinary module interfaces.
+
+      **4. Effect-row polymorphism across typed/untyped boundaries.**
+
+      Reusable higher-order functions often need to accommodate the effects of their arguments. For example, the same runner may invoke a callback that reads input or one that writes a log. Effect-row polymorphism expresses this relationship without fixing one effect allowance for every use.
+
+      The prototype supports explicit row instantiation and contracts for polymorphic functions crossing typed/untyped boundaries. Its current enforcement checks the concrete effect allowance selected at instantiation. This provides a foundation for, but does not yet establish, relational effect-row parametricity.
+
+      **5. Ongoing formal work.**
+
+      I am developing a high-level calculus for typed/untyped interaction with effect handlers and a lower-level calculus exposing the continuation and contract mechanisms used by the implementation. The intended results are type and effect soundness, together with a behavioral correspondence between the two levels.
+
+      A central next step is preserving **effect-row abstraction** across boundaries. Beyond checking a concrete set of permitted operations, this requires understanding how polymorphic code may generate, forward, or intercept effects belonging to an abstract row. The broader goal is a semantic account that connects these abstraction guarantees to an executable implementation in an existing language.
+pastResearch:
   - id: parallelizing-compilers
     title: 并行化编译器
-    category: 程序分析 · NOELLE
-    body: |
-      此前，我在 [NOELLE](https://github.com/arcana-lab/noelle) 项目中从事并行化编译器研究，目标是将程序映射到多核平台上，以获得可观的加速。具体而言，我实现了一种新的过程内可能指向分析（intraprocedural may points-to analysis），并将其集成到私有化转换器中。该转换器在保持程序语义的前提下，将动态内存分配和全局变量转换为局部变量，从而支持原本仅适用于 AllocaInst 的程序变换。
+    category: Program analysis · NOELLE
+    body: |-
+      Previously, under the supervision of **[Prof. Simone Campanoni](https://users.cs.northwestern.edu/~simonec/)**, I worked on a **[privatizer](https://github.com/arcana-lab/noelle/tree/master/src/tools/privatizer)** as part of the **[NOELLE](https://github.com/arcana-lab/noelle)** project. NOELLE is a parallelizing compiler that maps sequential programs to multicore platforms to achieve nontrivial speedups.
 
-      此外，这项可能指向分析还帮助消除了程序依赖图中过于保守的循环携带内存依赖，减少了不必要的同步，从而获得更高的并行加速比。
+      The privatizer converts dynamic memory allocations and global variables into local variables while preserving program semantics. Local variables are more predictable than dynamically allocated memory and global variables: other functions may access that memory or those global variables even after the current function returns, making their behavior difficult to analyze. The privatizer can therefore reduce false dependencies caused by global variables and help downstream analyses identify more parallelization opportunities.
+
+      The key idea is to check that each function uses a global variable independently. Only then can we privatize the variable within the functions that use it without changing program semantics. Functions can access global variables directly by name or indirectly through pointers; our implementation must handle both cases.
+
+      For direct access, the privatizer checks that functions accessing the same global variable do not depend on values written by other functions. Each function that uses the variable must initialize it before reading its value and must not invoke other functions that use it, since those calls could change its value. For indirect access, I helped design and implement a new intraprocedural points-to analysis that checks that values written by the current function do not leak to other functions.
+
+      This work helps remove overly conservative loop-carried memory dependencies from the program dependence graph, enabling further optimizations. For example, on a loop-intensive MiBench benchmark for which NOELLE previously achieved no speedup, the privatizer enabled roughly a threefold speedup on an eight-core architecture.
 education:
   - institution: 印第安纳大学布卢明顿分校
     degree: 计算机科学博士
     location: 美国印第安纳州布卢明顿
-    dates: 2024 年 9 月 - ?
+    dates: 2024 年 9 月 - 至今
     logo: /images/iub.png
   - institution: 美国西北大学
     degree: 计算机科学理学硕士
@@ -61,7 +151,7 @@ education:
     dates: 2022 年 9 月 - 2024 年 6 月
     logo: /images/nwu.png
   - institution: 南京大学
-    degree: 电子信息工程硕士
+    degree: 电子信息硕士
     location: 中国江苏南京
     dates: 2020 年 9 月 - 2022 年 6 月
     logo: /images/nju.png
@@ -70,10 +160,7 @@ education:
     location: 中国江苏南京
     dates: 2016 年 9 月 - 2020 年 6 月
     logo: /images/nju.png
-news:
-  - date: "2023-10-06"
-    body: 很幸运，在 [Midwest PL Summit 2023](https://mwpls2023.engin.umich.edu/) 上与 [Max](https://maxsnew.com/)、[Eric](https://www-personal.umich.edu/~ericgio/index.html)、[Edward](https://plg.uwaterloo.ca/~e45lee/)、[Guannan](https://continuation.passing.style/) 和 [Pedro](https://pedroabreu0.github.io/) 进行了许多富有启发的交流。
-  - date: "2023-10-05"
-    body: 明天将参加 [Midwest PL Summit 2023](https://mwpls2023.engin.umich.edu/)。安娜堡是一座非常美丽的城市。
-  - date: "2023-09-22"
-    body: 我的工作已全部合并到 [NOELLE](https://github.com/arcana-lab/noelle) 项目中。
+misc: |
+  - 我持有**日语能力考试（JLPT）N1 证书**，最近开始学习**法语**。🤓
+  - 我已经开始构建自己的函数式语言 **Lumière**，其中两种中间表示（IR）暂定名为 **Fresnel** 和 **Poisson**。🤣
+  - 我和朋友们一起用 Agda **[形式化](https://github.com/joshuacrotts/m782-project)**了 System F，并证明了其类型健全性。😎

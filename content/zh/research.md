@@ -1,1 +1,1 @@
-我的研究兴趣主要集中在**程序设计语言**领域，涵盖从理论基础到编译器实现的各个方面。总的来说，我喜欢设计和实现新的语言特性，以帮助程序员更好地进行软件开发。
+My research in **programming languages** connects formal semantics with language implementation. I study how types and effects govern interactions between typed and untyped code, using operational models, runtime contracts, and mechanized proofs to understand the guarantees these interactions provide.

@@ -39,7 +39,7 @@ export async function startServer({ root = ROOT, edit = false, port = 4321 } = {
         const names = contentFiles(language);
         if (req.method === 'GET' && url.pathname === '/api/content') {
           const content = await readContent(root, language);
-          return send(res, 200, { ...content, version: digest(content), token, apiVersion: 2 });
+          return send(res, 200, { ...content, version: digest(content), token, apiVersion: 3 });
         }
         if (req.method !== 'PUT' && req.method !== 'POST') return send(res, 405, { error: 'Method not allowed.' });
         if (req.headers['x-editor-token'] !== token || req.headers.origin !== `http://${req.headers.host}`) return send(res, 403, { error: 'Invalid editor session. Reload the editor and try again.' });

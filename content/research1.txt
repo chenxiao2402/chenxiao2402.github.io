@@ -1,0 +1,19 @@
+Yes. Vigilance gives the introduction a precise research context: **both projects ask what guarantees are missed by ordinary type soundness, but your work uses explicit operational obligations and brings blame into the same analysis.** The paper explicitly leaves incorporating blame properties as future work (§6). :codex-file-citation{path="/Users/xiao/Desktop/3649842.pdf" purpose="source"}
+
+I would emphasize that distinction without claiming your property implies, or is equivalent to, vigilance.
+
+## Types as Obligations
+
+**When typed and untyped code interact, which promises do types actually enforce, and can failures be blamed correctly?**
+
+Type soundness alone does not settle these questions. Work on [vigilance](https://doi.org/10.1145/3649842) (Gierczak et al., OOPSLA 2024) makes this distinction explicit: values should respect their runtime typing histories, not merely their final types. Vigilance formalizes this requirement through logical relations, while leaving blame outside its analysis.
+
+My work develops a complementary, **operational framework that studies type enforcement and blame together**. The central idea is to treat types as obligations that follow values through execution. An instrumented semantics records type expectations and boundary histories, propagating them through function arguments, results, and pair components. This separates what typed code requires from how a particular runtime enforces it, retaining information even when enforcement merges casts or discards proxies.
+
+I developed and mechanized this framework for [Natural](https://dl.acm.org/doi/10.1145/1176617.1176755), [Transient](https://dl.acm.org/doi/10.1145/3359619.3359742), [Forgetful](https://dl.acm.org/doi/10.1145/2676726.2676967), and [Threesomes](https://dl.acm.org/doi/10.1145/1706299.1706342)-style semantics**, establishing three main results:
+
+- **Faithful instrumentation.** A bidirectional evaluation correspondence proves that ordinary and instrumented execution agree on terminating values, so the instrumentation supports analysis without changing those results.
+- **A separation between type safety and obligation soundness.** Obligation soundness implies type soundness, but not conversely: Forgetful preserves result typing while allowing violations of accumulated obligations.
+- **A unified account of blame soundness and completeness.** Boundary histories provide an explicit reference against which to assess reported blame. Under these obligation-based criteria, Natural is both sound and complete; Forgetful can omit violated obligations, while eager cast merging can report conflicts before the corresponding obligations are violated.
+
+The framework, proofs, and counterexamples are mechanized in **Rocq/Coq**, with an accompanying executable **Racket/Redex** model. The result is a common basis for explaining how runtime enforcement strategies differ, beyond whether they satisfy type soundness.

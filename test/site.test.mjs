@@ -33,7 +33,8 @@ test('build preserves content and resolves local links and anchors', async t => 
   assert.ok(translations[0].zh.html.includes(md(chinese.researchIntro)));
   for (const row of chinese.data.research) assert.ok(translations[0].zh.html.includes(md(row.body)));
   for (const row of chinese.data.education) assert.ok(translations[0].zh.html.includes(escape(row.institution)));
-  for (const row of chinese.data.news) assert.ok(translations[0].zh.html.includes(md(row.body)));
+  for (const row of chinese.data.pastResearch) assert.ok(translations[0].zh.html.includes(md(row.body)));
+  assert.ok(translations[0].zh.html.includes(md(chinese.data.misc)));
   assert.match(translations[0].zh.html, /🇺🇸/);
   assert.match(translations[0].zh.html, /🇨🇳/);
   assert.match(translations[0].zh.html, /简体中文/);
@@ -46,7 +47,7 @@ test('build preserves content and resolves local links and anchors', async t => 
   assert.ok(documents[0].includes(md(bundle.about)));
   assert.ok(documents[0].includes(md(bundle.researchIntro)));
   const navigation = documents[0].match(/<nav aria-label="Main navigation">([\s\S]*?)<\/nav>/)[1];
-  assert.deepEqual([...navigation.matchAll(/href="([^"]+)"/g)].map(match => match[1]), ['#about', '#research', '#updates', escape(bundle.data.profile.cv)]);
+  assert.deepEqual([...navigation.matchAll(/href="([^"]+)"/g)].map(match => match[1]), ['#about', '#research', '#misc', escape(bundle.data.profile.cv)]);
   const education = [...documents[0].matchAll(/<article class="education-row">([\s\S]*?)<\/article>/g)].map(match => match[1]);
   assert.equal(education.length, bundle.data.education.length);
   for (const [i, row] of bundle.data.education.entries()) {
@@ -54,8 +55,20 @@ test('build preserves content and resolves local links and anchors', async t => 
     assert.ok(education[i].includes(escape(row.dates)));
     assert.ok(education[i].includes(escape(row.degree)));
   }
-  for (const row of bundle.data.news) assert.ok(documents[0].includes(row.date));
-  for (const row of bundle.data.research) assert.ok(documents[0].includes(md(row.body)));
+  for (const [language, content] of [['en', bundle], ['zh', chinese]]) {
+    const html = translations[0][language].html;
+    for (const [id, rows] of [['research', content.data.research], ['past-research', content.data.pastResearch]]) {
+      const section = html.match(new RegExp(`<section[^>]*id="${id}"[\\s\\S]*?<\\/section>`))[0];
+      for (const row of rows) {
+        assert.ok(section.includes(md(row.body)), `${row.id} belongs in ${id}`);
+        if (row.status) assert.ok(section.includes(escape(row.status)), `${row.id} preserves its progress description`);
+        assert.equal(html.split(`id="research-${row.id}"`).length - 1, 1, 'Project anchors must appear exactly once.');
+      }
+    }
+    const misc = html.match(/<section[^>]*id="misc"[\s\S]*?<\/section>/)[0];
+    assert.ok(misc.includes(md(content.data.misc)));
+    assert.ok(!/id="updates"|contact-section|feed(?:-zh)?\.xml/.test(html));
+  }
   await assert.rejects(access(path.join(out, 'research')), 'Research should be on the homepage, not a separate page.');
   for (const html of [...documents, ...translations.map(t => t.zh.html)]) {
     assert.equal((html.match(/<h1\b/g) ?? []).length, 1);
@@ -70,8 +83,8 @@ test('build preserves content and resolves local links and anchors', async t => 
       }
     }
   }
-  for (const file of ['.nojekyll', 'robots.txt', 'sitemap.xml', 'feed.xml', 'feed-zh.xml', 'file/XiaoChen_CV.pdf']) await access(path.join(out, file));
-  assert.match(await readFile(path.join(out, 'feed-zh.xml'), 'utf8'), /<language>zh-CN<\/language>/);
+  for (const file of ['.nojekyll', 'robots.txt', 'sitemap.xml', 'file/XiaoChen_CV.pdf']) await access(path.join(out, file));
+  for (const file of ['feed.xml', 'feed-zh.xml']) await assert.rejects(access(path.join(out, file)));
   await assert.rejects(access(path.join(out, 'editor'))); await assert.rejects(access(path.join(out, 'content')));
 });
 test('footer records the latest build date in Shanghai for both languages and pages', async t => {
@@ -101,12 +114,16 @@ test('footer records the latest build date in Shanghai for both languages and pa
 test('invalid content fails clearly and preserves the last good build', async t => {
   const root = await fixture(t); await build({ root });
   const before = await readFile(path.join(root, 'dist/index.html'), 'utf8');
-  const bundle = await readContent(root); bundle.data.news = [{ date: '2023-02-30', body: 'Test update' }];
-  assert.throws(() => validate(bundle), /valid date/);
-  bundle.data.news[0].date = '2023-10-06'; bundle.data.profile.photo = '/images/missing.jpg';
+  const bundle = await readContent(root); bundle.data.misc = null;
+  assert.throws(() => validate(bundle), /Misc/);
+  bundle.data.misc = ''; bundle.data.profile.photo = '/images/missing.jpg';
   await assert.rejects(build({ root, bundle }), /Missing file/);
   assert.equal(await readFile(path.join(root, 'dist/index.html'), 'utf8'), before);
   bundle.data.profile.photo = '/images/xiaochen.jpg';
+  const originalPast = bundle.data.pastResearch;
+  bundle.data.pastResearch = [structuredClone(bundle.data.research[0])];
+  assert.throws(() => validate(bundle), /unique/);
+  bundle.data.pastResearch = originalPast;
   bundle.data.research = [{ id: 'duplicate', title: 'Topic', category: 'Types', body: 'Description' }, { id: 'duplicate', title: 'Topic two', category: 'Types', body: 'Description two' }];
   assert.throws(() => validate(bundle), /unique/);
 });
@@ -154,17 +171,27 @@ test('Chinese edits save independently, back up Chinese files, and reject unsupp
   const englishBefore = await readFile(path.join(root, 'content/site.yml'), 'utf8');
   const chineseBefore = await readFile(path.join(root, 'content/zh/about.md'), 'utf8');
   const session = JSON.parse((await request(server, '/api/content?lang=zh')).text);
-  assert.equal(session.apiVersion, 2);
+  assert.equal(session.apiVersion, 3);
   session.about += '\n\n这是中文编辑保存测试。\n';
+  session.data.misc += '\n- 新的个人项目。\n';
+  const movedProject = session.data.research.shift();
+  session.data.pastResearch.push(movedProject);
   const headers = { 'Content-Type': 'application/json', 'X-Editor-Token': session.token, Origin: `http://127.0.0.1:${server.address().port}` };
   const result = await request(server, '/api/content?lang=zh', { method: 'PUT', headers, body: JSON.stringify(session) });
   assert.equal(result.status, 200, result.text);
   assert.equal(await readFile(path.join(root, 'content/site.yml'), 'utf8'), englishBefore);
   assert.match((await readContent(root, 'zh')).about, /这是中文编辑保存测试/);
+  const saved = await readContent(root, 'zh');
+  assert.match(saved.data.misc, /新的个人项目/);
+  assert.ok(saved.data.pastResearch.some(project => project.id === movedProject.id));
+  assert.ok(!saved.data.research.some(project => project.id === movedProject.id));
   const html = await readFile(path.join(root, 'dist/index.html'), 'utf8');
   const translations = JSON.parse(html.match(/<script id="language-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
   assert.match(translations.zh.html, /这是中文编辑保存测试/);
   assert.ok(!translations.en.html.includes('这是中文编辑保存测试'));
+  assert.match(translations.zh.html, /新的个人项目/);
+  const pastSection = translations.zh.html.match(/<section[^>]*id="past-research"[\s\S]*?<\/section>/)[0];
+  assert.ok(pastSection.includes(`id="research-${movedProject.id}"`), 'Moving a project preserves its public anchor.');
   const [backup] = await readdir(path.join(root, '.cache/content-backups'));
   assert.equal(await readFile(path.join(root, '.cache/content-backups', backup, 'zh/about.md'), 'utf8'), chineseBefore);
   assert.equal((await request(server, '/api/content?lang=zh', { method: 'PUT', headers, body: JSON.stringify(session) })).status, 409);

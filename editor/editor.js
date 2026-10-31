@@ -1,15 +1,16 @@
 let model, token, version, section = 'profile', language = 'en', dirty = false, busy = false;
 const $ = selector => document.querySelector(selector);
 function previewURL(refresh = false) {
-  const anchor = { profile: 'about', about: 'about', research: 'research', education: 'education', news: 'updates', home: 'about' }[section];
+  const anchor = { profile: 'about', about: 'about', research: 'research', pastResearch: 'past-research', education: 'education', misc: 'misc', home: 'about' }[section];
   return `/?lang=${language}${refresh ? `&preview=${Date.now()}` : ''}#${anchor}`;
 }
 const sections = {
   profile: ['Profile', 'Your name, contact details, portrait, and CV.'],
   about: ['Biography', 'Introduce yourself in your own words. Paragraphs and links are welcome.'],
-  research: ['Research', 'Add research topics, change their descriptions, and choose the order.'],
+  research: ['Ongoing research', 'Your current projects. Add topics, update descriptions, or move completed work to past research.'],
+  pastResearch: ['Past research', 'Earlier projects, displayed separately from your ongoing research.'],
   education: ['Education', 'One entry per row. Keep entries in reverse chronological order, newest first, using the move buttons.'],
-  news: ['Updates', 'News is displayed newest first. Add an update whenever you have something to share.'],
+  misc: ['Misc', 'Languages, interests, and personal projects.'],
   home: ['Page settings', 'Headings, the education highlight, and search engine details.'],
 };
 function status(text, type = '') { $('#status').textContent = text; $('#status').className = type; }
@@ -48,17 +49,18 @@ function upload(parent, label, key, accept) {
   });
   wrapper.append(title, input); parent.append(wrapper);
 }
+const researchFields = [['title', 'Title'], ['id', 'Page anchor', { hint: 'A unique short name, such as types-as-obligations. Its homepage link is #research-types-as-obligations. Keep it unchanged when moving a project.' }], ['category', 'Topics'], ['status', 'Progress (optional)', { hint: 'A short status line, such as “Manuscript in preparation.” Leave blank to hide it.' }], ['body', 'Full description on the homepage', { area: true, long: true }]];
 const schemas = {
-  research: [['title', 'Title'], ['id', 'Page anchor', { hint: 'A unique short name, such as complete-monitoring. Its homepage link is #research-complete-monitoring.' }], ['category', 'Topics'], ['body', 'Full description on the homepage', { area: true, long: true }]],
+  research: researchFields,
+  pastResearch: researchFields,
   education: [['institution', 'University'], ['degree', 'Degree'], ['location', 'Location'], ['dates', 'Dates'], ['logo', 'Logo image path', { hint: 'Optional. Existing logos: /images/iub.png, /images/nwu.png, /images/nju.png' }]],
-  news: [['date', 'Date', { type: 'date' }], ['body', 'Update', { area: true }]],
 };
 function collection(parent, key) {
   const list = model.data[key];
   if (!list.length) { const p = document.createElement('p'); p.className = 'empty'; p.textContent = 'No entries yet. Add your first one below.'; parent.append(p); }
   list.forEach((item, index) => {
     const record = document.createElement('fieldset'); record.className = 'record';
-    const legend = document.createElement('legend'); legend.textContent = `${index + 1}. ${item.title || item.institution || item.date || 'New entry'}`; record.append(legend);
+    const legend = document.createElement('legend'); legend.textContent = `${index + 1}. ${item.title || item.institution || 'New entry'}`; record.append(legend);
     schemas[key].forEach(([property, label, options]) => field(record, label, item[property], value => { item[property] = value; }, options));
     const actions = document.createElement('div'); actions.className = 'record-actions';
     [['↑ Move up', index === 0, () => { [list[index - 1], list[index]] = [list[index], list[index - 1]]; }], ['↓ Move down', index === list.length - 1, () => { [list[index + 1], list[index]] = [list[index], list[index + 1]]; }], ['Remove', false, () => { list.splice(index, 1); }]].forEach(([label, disabled, action]) => {
@@ -67,13 +69,19 @@ function collection(parent, key) {
       if (label === 'Remove') button.className = 'remove';
       button.addEventListener('click', () => { action(); changed(); render(); }); actions.append(button);
     });
+    if (key === 'research' || key === 'pastResearch') {
+      const destination = key === 'research' ? 'pastResearch' : 'research';
+      const move = document.createElement('button'); move.type = 'button';
+      move.textContent = `Move to ${key === 'research' ? 'past' : 'ongoing'} research`;
+      move.addEventListener('click', () => { model.data[destination].push(...list.splice(index, 1)); changed(); render(); });
+      actions.append(move);
+    }
     record.append(actions); parent.append(record);
   });
-  const add = document.createElement('button'); add.type = 'button'; add.className = 'add-button'; add.textContent = `+ Add ${key === 'news' ? 'update' : key === 'education' ? 'education' : 'research topic'}`;
+  const add = document.createElement('button'); add.type = 'button'; add.className = 'add-button'; add.textContent = `+ Add ${key === 'education' ? 'education' : 'research topic'}`;
   add.addEventListener('click', () => {
     const item = Object.fromEntries(schemas[key].map(([property]) => [property, '']));
-    if (key === 'news') item.date = new Date().toLocaleDateString('en-CA');
-    if (key === 'research') item.id = `topic-${Date.now()}`;
+    if (key === 'research' || key === 'pastResearch') item.id = `topic-${Date.now()}`;
     list.push(item); changed(); render();
     $('#content-form').querySelector('fieldset:last-of-type input')?.focus();
   }); parent.append(add);
@@ -88,7 +96,7 @@ function render() {
   }
   const form = $('#content-form'); form.replaceChildren();
   if (section === 'profile') {
-    const fields = [['name','Name'], ['nativeName','Alternate name'], ['role','Title / role'], ['affiliation','Affiliation'], ['location','Location'], ['email','Email'], ['github','GitHub URL'], ['linkedin','LinkedIn URL'], ['photo','Portrait image path'], ['cv','CV file path']];
+    const fields = [['name','Name'], ['nativeName','Alternate name'], ['role','Title / role'], ['affiliation','Affiliation'], ['location','Location'], ['email','Email'], ['github','GitHub URL'], ['photo','Portrait image path'], ['cv','CV file path']];
     for (const [key, label] of fields) {
       field(form, label, model.data.profile[key], value => { model.data.profile[key] = value; });
       if (key === 'photo') upload(form, 'Or choose a new portrait (up to 10 MB)', key, 'image/jpeg,image/png,image/webp');
@@ -97,8 +105,10 @@ function render() {
     field(form, 'Research interests', model.data.profile.interests.join('\n'), value => { model.data.profile.interests = value.split('\n').map(x => x.trim()).filter(Boolean); }, { area: true, hint: 'One interest per line.' });
   } else if (section === 'about') {
     help(form); field(form, 'About you', model.about, value => { model.about = value; }, { area: true, long: true });
+  } else if (section === 'misc') {
+    help(form); field(form, 'Misc content', model.data.misc, value => { model.data.misc = value; }, { area: true, long: true, hint: 'For a bullet list, start each line with a dash and a space.' });
   } else if (section === 'home') {
-    const fields = [['researchHeading','Research heading'], ['educationHeading','Education heading'], ['newsHeading','Updates heading'], ['contactHeading','Contact heading'], ['contactText','Contact message'], ['educationNote','Education highlight (optional)']];
+    const fields = [['researchHeading','Ongoing research heading'], ['pastResearchHeading','Past research heading'], ['educationHeading','Education heading'], ['miscHeading','Misc heading'], ['educationNote','Education highlight (optional)']];
     for (const [key,label] of fields) field(form, label, model.data.home[key], value => { model.data.home[key] = value; });
     for (const [key,label] of [['title','Browser title'],['description','Search engine description'],['url','Website URL']]) field(form, label, model.data.site[key], value => { model.data.site[key] = value; });
   } else {
@@ -138,7 +148,7 @@ async function loadLanguage(next) {
   try {
     const response = await fetch(`/api/content?lang=${next}`); const result = await response.json();
     if (!response.ok) throw new Error(result.error);
-    if (result.apiVersion !== 2) throw new Error('The editor server needs a restart. Stop it with Ctrl+C, then run ./edit.sh again.');
+    if (result.apiVersion !== 3) throw new Error('The editor server needs a restart. Stop it with Ctrl+C, then run ./edit.sh again.');
     ({ token, version } = result);
     model = { data: result.data, about: result.about, researchIntro: result.researchIntro };
     language = next;

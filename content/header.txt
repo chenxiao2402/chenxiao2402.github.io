@@ -1,0 +1,39 @@
+**首页可以按“我是谁、已经做了什么、正在寻找什么机会”来组织。** 申请意向放在靠上的独立段落，但不要让签证困境成为整页的主角。
+
+我目前读到的是搜索引擎收录的版本，仍保留着 Northwestern 硕士身份和“申请2024年秋季博士”的文字；实时页面未能打开。下面结合该版本和你在对话中更新的研究进展改写。[chenxiao2402.github.io](https://chenxiao2402.github.io/?utm_source=chatgpt.com)
+
+## 建议直接使用的英文内容
+
+### About Me
+
+I am **Xiao Chen (陈骁)**, a Ph.D. student in Computer Science at **Indiana University Bloomington**, advised by **Sam Tobin-Hochstadt**. My research focuses on **programming languages**, particularly gradual typing, operational semantics, and effect handlers. I am interested in designing language mechanisms and establishing formal guarantees for interoperability between typed and untyped code.
+
+My current research includes a framework for tracking and reasoning about runtime type obligations in gradually typed programs. **The formalization and mechanized proofs in Coq are complete**, and I am preparing the work for publication. I am also investigating the integration of effect handlers with gradual typing: an implementation is in place, with the formal semantics and proofs under development.
+
+Previously, I received my M.S. in Computer Science from **Northwestern University** in 2024, where I worked with **Christos Dimoulas** on gradual typing and **Simone Campanoni** on program analysis and parallelizing compilers.
+
+### Ph.D. Opportunities — 2027 Entry
+
+I am currently on leave from IU due to prolonged U.S. visa processing delays. **I am applying for fully funded Ph.D. opportunities outside the United States for 2027 entry**, with the aim of continuing and building on my existing research.
+
+I would welcome the opportunity to discuss research fit and potential supervision with faculty working on programming language semantics, type systems, effect handlers, or mechanized metatheory.
+
+**Contact:** xc56@iu.edu
+
+---
+
+## 页面上的配套调整
+
+**把“Ph.D. Opportunities — 2027 Entry”做成首页醒目的提示框，放在第一段介绍之后。** 展示顺序就会是：身份与研究方向 → 正在申请 → 两个项目的实质进展 → 过去经历。这样申请意向不会埋在页面底部。
+
+头像旁的简介可以改成：
+
+> **Ph.D. Student in Computer Science**  
+> **Indiana University Bloomington**  
+> Programming Languages · Type Systems · Mechanized Metatheory
+
+这里继续使用 **Ph.D. student**，不要写 *former Ph.D. student*，因为你还没有退出 IU；也暂时不要使用有时特指通过资格考核的 *Ph.D. candidate*。
+
+另外，**首页不必写“希望三年毕业”、具体申请学校、签证等待了多少天，或者为没有发表论文作解释。** 保留 *continuing and building on my existing research*，已经清楚表达你不是打算完全从零开始；具体培养年限和研究衔接，留到与导师交流时讨论。
+
+你的两个项目可以在后面的 **Research** 栏目展开，首页则保留上面这段已经完成什么、正在推进什么的概述。旧的 **“Applying for Fall 2024”** 提示应删除，CV链接也同步换成这次申请使用的版本。

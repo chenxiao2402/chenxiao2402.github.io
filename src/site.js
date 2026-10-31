@@ -88,9 +88,6 @@ function showLanguage(next, { userInitiated = false } = {}) {
     ['meta[property="og:description"]', version.description],
     ['meta[property="og:image"]', version.image],
   ]) document.querySelector(selector).content = value;
-  const feed = document.querySelector('link[type="application/rss+xml"]');
-  feed.href = version.feed;
-  feed.title = version.feedTitle;
   document.querySelector('.language-switch').hidden = false;
   updateButton();
   updateNavigation();
