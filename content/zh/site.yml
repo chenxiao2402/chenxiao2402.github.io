@@ -1,7 +1,7 @@
 # Edit with ./edit.sh, or edit this plain-text file directly.
 site:
-  title: 陈骁 · 程序设计语言
-  description: 陈骁（Xiao Chen），印第安纳大学布卢明顿分校计算机科学博士生，研究渐进类型、操作语义与效应处理器。正在寻找美国以外地区、2027 年入学的全额资助博士机会。
+  title: 陈骁 · 编程语言理论
+  description: 陈骁（Xiao Chen），印第安纳大学布卢明顿分校计算机科学博士生。研究渐进类型、操作语义与效应处理器。
   url: https://chenxiao2402.github.io
   language: zh-CN
 profile:
@@ -15,7 +15,7 @@ profile:
   photo: /images/xiaochen.jpg
   cv: /file/XiaoChen_CV.pdf
   interests:
-    - 程序设计语言
+    - 编程语言理论
     - 渐进类型
     - 效应处理器
     - 形式化验证
@@ -27,9 +27,21 @@ home:
   educationNote: ""
 research:
   - id: types-as-obligations
-    title: 类型即义务（Type as Obligations）
+    title: Type as Obligations
     category: Migratory Typing · Interoperability · Type Obligations · Blame Theorems · Bisimulation · Vigilance · Formal Verification
-    status: Rocq 机械化证明已完成；论文撰写中。
+    status: Rocq 形式化证明已完成；论文撰写中。
+    summary: |-
+      When typed and untyped modules interact, runtime enforcement must determine which type requirements to preserve and which boundaries to blame when those requirements fail. Different strategies use contracts, merge casts, or insert shallow checks, making their guarantees difficult to compare. Type soundness alone does not capture whether a value respects every type requirement it encounters during execution.
+
+      **Type as Obligations (TAO)** makes these requirements explicit. An executable profiler records a value’s typing history as **type obligations**, including their boundary origins, and propagates them through function calls and pair projections. This separates the requirements imposed by types from the mechanisms used to enforce them, giving different semantics a common basis for analysis.
+
+      My contributions connect this operational account to formal guarantees:
+
+      - **Mechanical profiling with evaluation correspondence.** TAO constructs the profiler for semantics expressed through its common interface, without manual instrumentation of individual programs. I prove a bidirectional correspondence between ordinary and profiler evaluation.
+      - **A stronger enforcement criterion.** I define **obligation soundness** and prove that it implies type soundness, but not conversely: returning a correctly typed result does not ensure that every accumulated obligation was respected.
+      - **Obligation-based blame criteria.** The framework defines **blame soundness and completeness** using violated obligations and their boundary provenance as the reference for blame assignment.
+
+      I have applied these definitions to modeled versions of **Natural, Threesomes, Forgetful, and Transient**, proving positive results and exhibiting counterexamples. The framework, metatheory, and counterexamples are mechanized in **Rocq/Coq**, with an executable **Racket/Redex** model. This comparison makes differences in enforcement and blame explicit and their causes inspectable through execution.
     body: |-
       Languages that combine static and dynamic typing use different runtime enforcement strategies: some wrap values in contracts, some merge casts, and others insert shallow checks. These choices affect not only type safety but also which boundary violations are detected and whether blame identifies the responsible boundaries. Comparing these guarantees is difficult when each semantics is analyzed using different definitions and proof techniques.
 
@@ -82,9 +94,22 @@ research:
 
       The framework, metatheory, and counterexamples are formalized in **Rocq/Coq**, with an accompanying executable **Racket/Redex** model. The broader contribution is a common semantic account that makes the guarantees of different enforcement strategies explicit, comparable, and machine-checked, while making their failures accessible through execution.
   - id: migratory-typing-effects
-    title: 代数效应与处理器的迁移式类型系统
+    title: Migratory Typing for Algebraic Effects and Handlers
     category: Migratory Typing · Interoperability · Effect Handlers · Typed Racket · Runtime Contracts
     status: 原型已实现；形式语义与证明工作进行中。
+    summary: |-
+      An effect system describes which operations may escape a computation and require handling by its surrounding context. This guarantee becomes difficult to preserve when typed and untyped modules interact. An untyped function can return a correctly typed value while performing an unexpected effect, and a request may cross several calls and module boundaries before reaching a handler.
+
+      **Effect-Typed-Racket** investigates this problem by extending Typed Racket with **polymorphic algebraic effect handlers, effect typing, and runtime contracts**. The central idea is to enforce effect specifications by monitoring the requests that escape protected computations. The implementation connects source-level effect information to runtime checks built using Racket’s delimited continuations.
+
+      My contributions connect source-level effect specifications to runtime enforcement:
+
+      - **Effect typing within Typed Racket.** Function types describe the effects of calls; handler types describe handled operations, result types, and remaining effects. I integrate this information into higher-order calls, polymorphic instantiation, and module imports, allowing effectful programs to use Racket’s existing language infrastructure.
+      - **Contracts for escaping effects.** A function contracted to allow only `read` is rejected if a `write` request escapes its execution, even if an outer handler could handle it. An operation handled entirely inside the function does not violate its external effect allowance. These reusable contracts separately check effect allowances and the values exchanged through operations and handlers; Typed Racket generates them from boundary types.
+      - **Effect identity across modules.** I associate effect declarations’ static information with their lexical bindings, so the type checker and runtime handlers recognize the same operations across renamed imports and re-exports. This allows effectful components to be organized and reused through ordinary module interfaces.
+      - **Effect-row polymorphism across typed–untyped boundaries.** A higher-order function can accommodate callbacks with different effects, such as reading input or writing a log. The prototype supports explicit row instantiation and contracts that check the concrete effect allowance selected at each instantiation.
+
+      The prototype is implemented; its polymorphic contracts do not yet establish **relational effect-row parametricity**. I am developing a high-level calculus for typed–untyped interaction with effect handlers and a lower-level calculus exposing the implementation’s continuation and contract mechanisms. The intended results are **type-and-effect soundness** and a **behavioral correspondence** between the two levels, connecting source-level guarantees to the executable implementation.
     body: |-
       Algebraic effect handlers separate a computation’s requests from their interpretation. A computation can request an operation, such as reading input or choosing between alternatives, while an enclosing handler determines how to respond and whether to resume the computation. An effect system statically describes which operations may escape a computation and require handling by its surrounding context.
 
@@ -161,6 +186,6 @@ education:
     dates: 2016 年 9 月 - 2020 年 6 月
     logo: /images/nju.png
 misc: |
-  - 我持有**日语能力考试（JLPT）N1 证书**，最近开始学习**法语**。🤓
+  - 我持有 🇯🇵 **日语能力考试（JLPT）N1 证书**，最近开始学习 🇫🇷 **法语**。🤓
   - 我已经开始构建自己的函数式语言 **Lumière**，其中两种中间表示（IR）暂定名为 **Fresnel** 和 **Poisson**。🤣
-  - 我和朋友们一起用 Agda **[形式化](https://github.com/joshuacrotts/m782-project)**了 System F，并证明了其类型健全性。😎
+  - 我和朋友们一起用 Agda [形式化](https://github.com/joshuacrotts/m782-project) 了 System F，并证明了其类型健全性。😎

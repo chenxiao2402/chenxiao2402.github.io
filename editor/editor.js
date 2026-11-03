@@ -1,5 +1,6 @@
 let model, token, version, section = 'profile', language = 'en', dirty = false, busy = false;
 const $ = selector => document.querySelector(selector);
+const languages = { en: { label: 'English', name: 'English' }, zh: { label: '中文', name: 'Chinese' }, ja: { label: '日本語', name: 'Japanese' } };
 function previewURL(refresh = false) {
   const anchor = { profile: 'about', about: 'about', research: 'research', pastResearch: 'past-research', education: 'education', misc: 'misc', home: 'about' }[section];
   return `/?lang=${language}${refresh ? `&preview=${Date.now()}` : ''}#${anchor}`;
@@ -49,7 +50,14 @@ function upload(parent, label, key, accept) {
   });
   wrapper.append(title, input); parent.append(wrapper);
 }
-const researchFields = [['title', 'Title'], ['id', 'Page anchor', { hint: 'A unique short name, such as types-as-obligations. Its homepage link is #research-types-as-obligations. Keep it unchanged when moving a project.' }], ['category', 'Topics'], ['status', 'Progress (optional)', { hint: 'A short status line, such as “Manuscript in preparation.” Leave blank to hide it.' }], ['body', 'Full description on the homepage', { area: true, long: true }]];
+const researchFields = [
+  ['title', 'Title'],
+  ['id', 'Project ID', { hint: 'A unique short name, such as types-as-obligations. It sets the homepage anchor #research-types-as-obligations and, when a summary is provided, the detail URL /research/types-as-obligations/. Keep it unchanged to preserve these links, including when moving a project.' }],
+  ['category', 'Topics', { hint: 'Keep research keywords in English in every language version. Each version is edited separately.' }],
+  ['status', 'Progress (optional)', { hint: 'A short status line, such as “Manuscript in preparation.” Leave blank to hide it.' }],
+  ['summary', 'Homepage summary (optional)', { area: true, long: true, hint: 'Shown on the homepage with a link to the full description. Leave blank to show the full description on the homepage without a detail link. Keep research summaries in English in every language version. Each version is edited separately.' }],
+  ['body', 'Full description', { area: true, long: true, hint: 'Shown on the detail page when a homepage summary is provided; otherwise shown on the homepage. Editing the summary does not change this text. Keep research descriptions in English in every language version. Each version is edited separately.' }],
+];
 const schemas = {
   research: researchFields,
   pastResearch: researchFields,
@@ -88,7 +96,7 @@ function collection(parent, key) {
 }
 function render() {
   $('#section-title').textContent = sections[section][0]; $('#section-help').textContent = sections[section][1];
-  $('#section-label').textContent = `${language === 'zh' ? '中文' : 'English'} / ${sections[section][0]}`;
+  $('#section-label').textContent = `${languages[language].label} / ${sections[section][0]}`;
   const nav = $('#sections'); nav.replaceChildren();
   for (const [key, [label]] of Object.entries(sections)) {
     const button = document.createElement('button'); button.type = 'button'; button.textContent = label; button.setAttribute('aria-current', String(section === key));
@@ -113,7 +121,7 @@ function render() {
     for (const [key,label] of [['title','Browser title'],['description','Search engine description'],['url','Website URL']]) field(form, label, model.data.site[key], value => { model.data.site[key] = value; });
   } else {
     help(form);
-    if (section === 'research') field(form, 'Research introduction', model.researchIntro, value => { model.researchIntro = value; }, { area: true });
+    if (section === 'research') field(form, 'Research introduction', model.researchIntro, value => { model.researchIntro = value; }, { area: true, hint: 'Keep the research introduction in English in every language version. Each version is edited separately.' });
     collection(form, section);
   }
 }
@@ -156,7 +164,7 @@ async function loadLanguage(next) {
     render();
     $('#preview').src = previewURL();
     $('#open-preview').href = `/?lang=${language}`;
-    status(`Editing ${language === 'zh' ? 'Chinese' : 'English'}. Saves update this language only; nothing is published automatically.`);
+    status(`Editing ${languages[language].name}. Saves update this language only; nothing is published automatically.`);
   } catch (error) {
     if (!model) $('#section-title').textContent = 'Could not load content';
     $('#content-language').value = language;

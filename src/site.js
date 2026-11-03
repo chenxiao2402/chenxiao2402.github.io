@@ -59,16 +59,16 @@ for (const event of ['wheel', 'touchstart', 'pointerdown', 'keydown']) {
 
 function preferredLanguage() {
   const explicit = new URL(location.href).searchParams.get('lang');
-  if (explicit === 'en' || explicit === 'zh') return explicit;
+  if (Object.hasOwn(versions, explicit)) return explicit;
   try {
     const saved = localStorage.getItem('xiao-language');
-    if (saved === 'en' || saved === 'zh') return saved;
+    if (Object.hasOwn(versions, saved)) return saved;
   } catch { /* The language switch also works when storage is unavailable. */ }
   return 'en';
 }
 
 function showLanguage(next, { userInitiated = false } = {}) {
-  if (!['en', 'zh'].includes(next)) return;
+  if (!Object.hasOwn(versions, next)) return;
   stopScrolling();
   // Preserve the reader's position within the current section when its length changes.
   const current = [...document.querySelectorAll('#main section[id]')].filter(el => el.getBoundingClientRect().top <= 80).at(-1);
@@ -104,7 +104,7 @@ function showLanguage(next, { userInitiated = false } = {}) {
       const top = bounds ? bounds.top + window.scrollY + progress * bounds.height : previousScroll;
       window.scrollTo({ top, behavior: 'instant' });
     }
-    document.getElementById('language-status').textContent = language === 'zh' ? '已切换为中文。' : 'Switched to English.';
+    document.getElementById('language-status').textContent = version.languageChanged;
   } else if (changed && location.hash) {
     requestAnimationFrame(() => document.getElementById(location.hash.slice(1))?.scrollIntoView({ behavior: 'instant' }));
   }

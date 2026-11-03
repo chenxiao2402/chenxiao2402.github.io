@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import YAML from 'yaml';
 import { Marked } from 'marked';
+import { LANGUAGES } from './languages.mjs';
 
 export const ROOT = fileURLToPath(new URL('../', import.meta.url));
 export const escape = (value = '') => String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -23,10 +24,10 @@ const markdown = new Marked({
   },
 });
 export const md = (value = '') => markdown.parse(value);
-export const dateLabel = (date, language = 'en') => new Intl.DateTimeFormat(language === 'zh' ? 'zh-CN' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' }).format(new Date(`${date}T12:00:00Z`));
+export const dateLabel = (date, language = 'en') => new Intl.DateTimeFormat(LANGUAGES[language].dateLocale, { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' }).format(new Date(`${date}T12:00:00Z`));
 export function contentFiles(language = 'en') {
-  if (!['en', 'zh'].includes(language)) throw new Error('Unsupported language. Choose en or zh.');
-  return ['site.yml', 'about.md', 'research.md'].map(file => language === 'zh' ? `zh/${file}` : file);
+  if (!Object.hasOwn(LANGUAGES, language)) throw new Error(`Unsupported language. Choose ${Object.keys(LANGUAGES).join(', ')}.`);
+  return ['site.yml', 'about.md', 'research.md'].map(file => language === 'en' ? file : `${language}/${file}`);
 }
 
 const required = (object, key, label, optional = false) => {
@@ -56,7 +57,10 @@ export function validate(bundle) {
     }
   }
   const projects = [...data.research, ...data.pastResearch];
-  for (const project of projects) if (project.status !== undefined) required(project, 'status', 'Research progress', true);
+  for (const project of projects) {
+    if (project.status !== undefined) required(project, 'status', 'Research progress', true);
+    if (project.summary !== undefined) required(project, 'summary', 'Research homepage summary', true);
+  }
   if (new Set(projects.map(x => x.id)).size !== projects.length) throw new Error('Research IDs must be unique across ongoing and past research.');
   return bundle;
 }
