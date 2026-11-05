@@ -2,7 +2,7 @@
 
 我的**渐进类型**研究围绕以下问题展开：当有类型代码与无类型代码交互时，除了通常的类型健全性之外，还应提供哪些保证，又该如何在运行时落实这些保证？具体而言，我通过语言设计、操作语义和形式化证明，研究**迁移式类型（migratory typing）**，即有类型模块与无类型模块之间的互操作。我尤其关注类型系统所承诺的保证与落实这些保证的运行时机制之间的联系。
 
-我目前从两个方向研究这一问题。**[Type as Obligations](#research-types-as-obligations)** 研究值应如何遵守其运行时类型历史，以及如何依据这些历史进行责任归因。**[Effect-Typed-Racket](#research-migratory-typing-effects)** 探索 Typed Racket 中代数效应处理器的效应类型与运行时约束机制。未来，我也希望研究**子结构类型（substructural types）**，以及如何在有类型与无类型代码的边界上落实资源约束。
+我目前从两个方向研究这一问题。**[Type as Obligations](#research-types-as-obligations)** 研究值应如何遵守其运行时类型历史，以及如何依据这些历史进行责任归因。**[Effect Typed Racket](#research-migratory-typing-effects)** 探索 Typed Racket 中代数效应处理器的效应类型与运行时约束机制。未来，我也希望研究**子结构类型（substructural types）**，以及如何在有类型与无类型代码的边界上落实资源约束。
 
 > ### 寻找博士机会 — 2027 年入学
 >

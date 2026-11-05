@@ -94,13 +94,13 @@ research:
 
       The framework, metatheory, and counterexamples are formalized in **Rocq/Coq**, with an accompanying executable **Racket/Redex** model. The broader contribution is a common semantic specification that makes the guarantees of different enforcement strategies explicit, comparable, and machine-checked, while making their failures accessible through execution.
   - id: migratory-typing-effects
-    title: Migratory Typing for Algebraic Effects and Handlers
+    title: Effect Typed Racket
     category: Migratory Typing · Interoperability · Effect Handlers · Typed Racket · Runtime Contracts
     status: プロトタイプ実装済み。形式的意味論と証明に取り組んでいます。
     summary: |-
       An effect system describes which operations may escape a computation and require handling by its surrounding context. This guarantee becomes difficult to preserve when typed and untyped modules interact. An untyped function can return a correctly typed value while performing an unexpected effect, and a request may cross several calls and module boundaries before reaching a handler.
 
-      **Effect-Typed-Racket** investigates this problem by extending Typed Racket with **polymorphic algebraic effect handlers, effect typing, and runtime contracts**. The central idea is to enforce effect specifications by monitoring the requests that escape protected computations. The implementation connects source-level effect information to runtime checks built using Racket’s delimited continuations.
+      **Effect Typed Racket** investigates this problem by extending Typed Racket with **polymorphic algebraic effect handlers, effect typing, and runtime contracts**. The central idea is to enforce effect specifications by monitoring the requests that escape protected computations. The implementation connects source-level effect information to runtime checks built using Racket’s delimited continuations.
 
       My contributions connect source-level effect specifications to runtime enforcement:
 

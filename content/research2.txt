@@ -1,4 +1,4 @@
-Migratory Typing for Algebraic Effects and Handlers
+Effect Typed Racket
 
 How can statically checked effect guarantees remain meaningful when typed code interacts with untyped code? I investigate this question through a Typed Racket extension that combines algebraic effect handlers, effect-row polymorphism, and runtime contracts. The project connects source-level reasoning about effects with their implementation using delimited continuations.
 
